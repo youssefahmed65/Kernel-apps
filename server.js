@@ -18,7 +18,7 @@ if (!Number.isInteger(port) || port < 1 || port > 65535) {
 
 app.disable("x-powered-by");
 app.get("/healthz", (_request, response) => {
-  response.json({ status: "ok" });
+  response.json({ status: "ok", peerServer: true });
 });
 
 const peerServer = ExpressPeerServer(server, {

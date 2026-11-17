@@ -14,99 +14,83 @@
       }
       body {
         margin: 0;
+        min-height: 100vh;
+        min-height: 100dvh;
         background:
           radial-gradient(ellipse at 18% 20%, #18254a 0%, transparent 48%),
           radial-gradient(ellipse at 82% 78%, #173b46 0%, transparent 46%),
           linear-gradient(135deg, #080d1b 0%, #111329 52%, #07151b 100%);
         color: #eaf5ff;
         font-family: Tahoma, Arial, sans-serif;
-        padding: 10px;
+        overflow: hidden;
       }
       .wrap {
-        width: min(100%, 1000px);
-        margin: auto;
-      }
-      .wrap:not(:fullscreen) {
-        padding: clamp(10px, 2vw, 18px);
-        border: 1px solid #28436a;
-        border-radius: 22px;
-        background:
-          radial-gradient(ellipse at 8% 0%, #24345a66, transparent 38%),
-          linear-gradient(155deg, #101a31f2, #070c19f5 72%);
-        box-shadow: 0 20px 70px #0008, 0 0 35px #2768a322;
-      }
-      .wrap:fullscreen {
-        position: relative;
-        display: flex;
-        flex-direction: column;
+        position: fixed;
+        inset: 0;
         width: 100%;
         height: 100vh;
         height: 100dvh;
-        max-width: none;
         margin: 0;
-        padding: 0;
         overflow: hidden;
-        background:
-          radial-gradient(ellipse at 18% 20%, #18254a 0%, transparent 48%),
-          radial-gradient(ellipse at 82% 78%, #173b46 0%, transparent 46%),
-          linear-gradient(135deg, #080d1b 0%, #111329 52%, #07151b 100%);
       }
-      .wrap:fullscreen #game {
+      #downloadToggle {
+        position: relative;
+        overflow: hidden;
+        border: 1px solid #78f0df;
+        background: linear-gradient(135deg, #18a990, #176b8b);
+        color: #f2fffc;
+        box-shadow: 0 0 16px #32e5d344, inset 0 1px #ffffff30;
+        transition: box-shadow 180ms ease, filter 180ms ease, transform 180ms ease;
+      }
+      #downloadToggle::before {
         position: absolute;
-        top: 50%;
-        left: 50%;
-        flex: none;
-        width: 100vw;
-        height: 100vh;
-        height: 100dvh;
-        aspect-ratio: auto;
-        border: 0;
-        border-radius: 0;
-        background: transparent;
-        box-shadow: none;
-        animation: none;
-        transform: translate(-50%, -50%);
+        inset: 0;
+        background: linear-gradient(110deg, transparent 20%, #ffffff30 50%, transparent 80%);
+        content: "";
+        transform: translateX(-120%);
+        transition: transform 450ms ease;
       }
-      .wrap:fullscreen .help,
-      .wrap:fullscreen .story {
-        display: none;
+      #downloadToggle:hover {
+        border-color: #b6fff3;
+        box-shadow: 0 0 22px #32e5d377, inset 0 1px #ffffff50;
+        filter: brightness(1.12);
       }
-      .wrap:fullscreen .controls {
-        position: absolute;
-        z-index: 2;
-        right: 12px;
-        bottom: 12px;
-        left: 12px;
-        display: none;
-        flex-direction: row;
-        justify-content: space-between;
-        gap: 8px;
-        margin: 0;
-        pointer-events: none;
+      #downloadToggle:hover::before {
+        transform: translateX(120%);
       }
-      .wrap:fullscreen .controls .cluster {
-        flex: 0 1 auto;
-        gap: 6px;
-        pointer-events: none;
+      #downloadToggle:active {
+        transform: scale(0.97);
       }
-      .wrap:fullscreen .controls button {
-        flex: 0 1 auto;
-        min-width: 90px;
-        min-height: 48px;
-        background: #142747dd;
-        pointer-events: auto;
+      #downloadToggle span {
+        position: relative;
+        z-index: 1;
       }
       header {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 10px;
-        flex-wrap: wrap;
-        margin-bottom: 12px;
-        padding: 10px 12px;
-        border: 1px solid #243b5d;
-        border-radius: 15px;
-        background: linear-gradient(110deg, #0b1428dd, #142442bb);
+        direction: ltr;
+        gap: 6px;
+        position: fixed;
+        z-index: 3;
+        top: max(6px, env(safe-area-inset-top));
+        left: max(8px, env(safe-area-inset-left));
+        right: max(8px, env(safe-area-inset-right));
+        width: auto;
+        margin: 0 auto;
+        padding: 0;
+        border: 0;
+        background: transparent;
+      }
+      header #menuOpen {
+        order: -1;
+      }
+      #fullscreenToggle {
+        order: 2;
+        flex: 0 0 auto;
+        min-height: 40px;
+        padding: 8px 11px;
+        font-size: 14px;
       }
       h1 {
         margin: 0;
@@ -118,8 +102,12 @@
       }
       .hud {
         display: flex;
+        justify-content: center;
+        flex: 1;
+        min-width: 0;
         gap: 7px;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
+        direction: rtl;
       }
       .pill {
         background: #111d37;
@@ -128,17 +116,50 @@
         padding: 8px 11px;
         font-weight: bold;
       }
+      .pill #planet,
+      .pill #onlinePlayersCount,
+      .stat-value {
+        display: inline-block;
+        direction: ltr;
+        unicode-bidi: isolate;
+      }
       canvas {
         display: block;
-        width: 100%;
-        height: auto;
-        aspect-ratio: 16 / 9;
-        border: 2px solid #3978a8;
-        border-radius: 17px;
+        position: fixed;
+        inset: 0;
+        width: 100vw;
+        height: 100vh;
+        height: 100dvh;
+        border: 0;
+        border-radius: 0;
         background: #090f24;
-        box-shadow: 0 0 30px #1477a455;
+        box-shadow: none;
         touch-action: none;
-        animation: canvas-glow 5s ease-in-out infinite;
+      }
+      .mode-options {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+        margin-top: 20px;
+      }
+      .mode-card {
+        display: flex;
+        min-width: 0;
+        min-height: 148px;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 16px 10px;
+        background: linear-gradient(145deg, #18385d, #101c35);
+        font-size: 17px;
+      }
+      .mode-card .mode-icon {
+        font-size: 32px;
+      }
+      .mode-card small {
+        color: #b9cde7;
+        font-size: 12px;
       }
       @keyframes kernel-glow {
         50% { text-shadow: 0 0 28px #28bfff, 0 0 46px #1477a4; }
@@ -157,17 +178,44 @@
       }
       .controls {
         display: none;
-        gap: 8px;
+        gap: 6px;
         justify-content: space-between;
-        margin-top: 10px;
+        align-items: flex-end;
+        position: fixed;
+        z-index: 3;
+        bottom: max(8px, env(safe-area-inset-bottom));
+        left: max(8px, env(safe-area-inset-left));
+        right: max(8px, env(safe-area-inset-right));
+        width: auto;
+        margin: 0;
+        direction: ltr;
+        pointer-events: none;
+      }
+      .controls[hidden] {
+        display: none;
       }
       .cluster {
         display: flex;
-        gap: 7px;
-        flex: 1;
+        gap: 4px;
+        flex: 0 1 auto;
+        padding: 4px;
+        border: 1px solid #5279a477;
+        border-radius: 14px;
+        background: #07101dcc;
+        backdrop-filter: blur(5px);
+        pointer-events: auto;
       }
       .controls .cluster:first-child {
         direction: ltr;
+      }
+      .controls .cluster button {
+        flex: 0 1 48px;
+        min-width: 38px;
+        min-height: 40px;
+        padding: 4px 2px;
+        border-radius: 10px;
+        font-size: 11px;
+        touch-action: none;
       }
       button {
         flex: 1;
@@ -203,6 +251,89 @@
       }
       .story b {
         color: #ffe5a6;
+      }
+      .main-menu {
+        position: fixed;
+        z-index: 5;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        padding: max(14px, env(safe-area-inset-top))
+          max(14px, env(safe-area-inset-right))
+          max(14px, env(safe-area-inset-bottom))
+          max(14px, env(safe-area-inset-left));
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        -webkit-overflow-scrolling: touch;
+        border-radius: 0;
+        background:
+          radial-gradient(ellipse at 50% 30%, #172743, transparent 62%),
+          #060b17;
+      }
+      .main-menu[hidden],
+      .menu-screen[hidden] {
+        display: none;
+      }
+      .menu-card {
+        width: min(100%, 520px);
+        max-height: calc(100dvh - 28px);
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        -webkit-overflow-scrolling: touch;
+        padding: clamp(20px, 5vw, 38px);
+        border: 1px solid #3978a8;
+        border-radius: 22px;
+        background: linear-gradient(155deg, #101d35f5, #080e1cf5);
+        box-shadow: 0 20px 70px #000b, 0 0 40px #28bfff22;
+        text-align: center;
+      }
+      .menu-card h2 {
+        margin: 0 0 10px;
+        color: #72e6ff;
+        font-size: clamp(25px, 6vw, 38px);
+        text-shadow: 0 0 20px #28bfff77;
+      }
+      .menu-card p {
+        color: #b9cde7;
+        line-height: 1.8;
+      }
+      .menu-actions {
+        display: grid;
+        gap: 10px;
+        margin-top: 20px;
+      }
+      .menu-actions button,
+      .menu-card select {
+        width: 100%;
+        min-height: 48px;
+      }
+      .menu-primary {
+        border-color: #69e5ff;
+        background: linear-gradient(145deg, #126b91, #17345b);
+        font-size: 18px;
+      }
+      .menu-settings {
+        display: grid;
+        gap: 12px;
+        margin-top: 16px;
+        text-align: right;
+      }
+      .menu-settings .music-volume {
+        justify-content: space-between;
+      }
+      .menu-settings .skin-panel {
+        margin-top: 0;
+      }
+      .menu-setting-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .menu-setting-row > * {
+        flex: 1 1 180px;
+      }
+      .menu-back {
+        margin-top: 14px;
       }
       .music-toggle {
         flex: 0 0 auto;
@@ -259,8 +390,7 @@
       .online-panel input.server-url {
         width: min(360px, 70vw);
       }
-      .online-panel select,
-      .jupiter-choice select {
+      .online-panel select {
         min-height: 38px;
         border: 1px solid #4278a5;
         border-radius: 9px;
@@ -269,16 +399,24 @@
         padding: 6px 9px;
         font: inherit;
       }
-      .jupiter-choice {
-        margin-top: 8px;
-      }
-      .jupiter-choice[hidden] {
-        display: none;
-      }
       .online-status,
       .challenge-label {
         color: #a9d8e6;
         font-size: 12px;
+      }
+      .challenge-label {
+        position: fixed;
+        z-index: 2;
+        top: max(54px, calc(env(safe-area-inset-top) + 48px));
+        left: max(8px, env(safe-area-inset-left));
+        max-width: min(36vw, 310px);
+        padding: 6px 10px;
+        border: 1px solid #28436a88;
+        border-radius: 10px;
+        background: #07101dcc;
+        backdrop-filter: blur(8px);
+        font-size: 11px;
+        pointer-events: none;
       }
       #copyRoomLink[hidden] {
         display: none;
@@ -303,249 +441,132 @@
         min-width: 32px;
         text-align: center;
       }
+      .sound-section {
+        display: grid;
+        gap: 8px;
+        padding: 10px;
+        border: 1px solid #29466e;
+        border-radius: 12px;
+        background: #101c34;
+      }
+      .sound-section h3 {
+        margin: 0;
+        color: #72e6ff;
+        font-size: 14px;
+      }
+      .spectator-notice {
+        position: fixed;
+        z-index: 3;
+        top: max(86px, calc(env(safe-area-inset-top) + 82px));
+        left: 50%;
+        max-width: calc(100vw - 24px);
+        padding: 7px 12px;
+        transform: translateX(-50%);
+        border: 1px solid #72e6ff88;
+        border-radius: 12px;
+        background: #07152be8;
+        color: #eaf8ff;
+        font-size: 13px;
+        text-align: center;
+        pointer-events: none;
+      }
+      .spectator-notice[hidden] {
+        display: none;
+      }
+      .menu-settings .skin-panel,
+      .menu-settings .laser-skin-panel {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(125px, 1fr));
+        width: 100%;
+      }
+      .menu-settings .skin-panel[hidden],
+      .menu-settings .laser-skin-panel[hidden] {
+        display: none;
+      }
+      .menu-settings .skin-choice,
+      .menu-settings .laser-skin-choice {
+        min-height: 112px;
+        padding: 10px;
+        font-size: 13px;
+      }
       @media (max-width: 650px) {
-        body {
-          padding: 6px;
-        }
-        .wrap:not(:fullscreen) {
-          padding: 8px;
-          border-radius: 16px;
-        }
         .controls {
           display: flex;
-          flex-direction: column;
+          width: auto;
+        }
+        .controls .cluster:last-child {
+          gap: 3px;
+          padding: 3px;
         }
         .help {
           font-size: 11px;
         }
         header {
-          align-items: flex-start;
-          flex-direction: column;
-          padding: 8px;
+          gap: 3px;
         }
         .pill {
-          padding: 7px 9px;
-          font-size: 13px;
+          padding: 4px 5px;
+          border-radius: 8px;
+          font-size: 10px;
+          white-space: nowrap;
+        }
+        .hud {
+          gap: 3px;
+        }
+        #fullscreenToggle {
+          min-height: 34px;
+          padding: 5px 7px;
+          font-size: 11px;
+        }
+        header #menuOpen {
+          min-height: 34px;
+          padding: 5px 7px;
+          font-size: 10px;
+        }
+        .mode-options {
+          grid-template-columns: 1fr;
+          gap: 8px;
+          margin-top: 12px;
+        }
+        .mode-card {
+          min-height: 100px;
+          flex-direction: row;
+          flex-wrap: wrap;
+          gap: 6px 10px;
+        }
+        .mode-card .mode-icon {
+          font-size: 24px;
+        }
+        .challenge-label {
+          top: max(48px, calc(env(safe-area-inset-top) + 42px));
+          left: 6px;
+          max-width: 38vw;
+          padding: 4px 6px;
+          font-size: 9px;
         }
         button {
-          font-size: 14px;
-          min-height: 55px;
+          font-size: 12px;
+          min-height: 40px;
         }
         .story {
           font-size: 12px;
         }
-        .wrap:fullscreen {
-          padding: 0;
+      }
+      @media (max-width: 380px) {
+        .pill {
+          padding: 3px 4px;
+          font-size: 9px;
         }
-        .wrap:fullscreen header {
-          position: absolute;
-          z-index: 2;
-          top: 8px;
-          left: 8px;
-          right: 8px;
-          margin: 0;
-          align-items: flex-start;
-          flex-direction: row;
-        }
-        .wrap:fullscreen h1,
-        .wrap:fullscreen .music-volume,
-        .wrap:fullscreen #skinToggle,
-        .wrap:fullscreen #laserSkinToggle,
-        .wrap:fullscreen #shieldToggle,
-        .wrap:fullscreen #onlineToggle {
-          display: none;
-        }
-        .wrap:fullscreen .hud {
-          gap: 4px;
-        }
-        .wrap:fullscreen .pill,
-        .wrap:fullscreen #musicToggle,
-        .wrap:fullscreen #fullscreenToggle {
-          padding: 6px 8px;
-          font-size: 11px;
-        }
-        .wrap:fullscreen .controls {
-          position: absolute;
-          z-index: 2;
-          inset: 0;
-          display: flex;
-          flex-direction: row;
-          justify-content: space-between;
-          align-items: flex-end;
-          margin: 0;
-          pointer-events: none;
-        }
-        .wrap:fullscreen .controls .cluster {
-          flex: 0 1 auto;
-          min-width: 0;
-          gap: 6px;
-          margin: 0 max(10px, env(safe-area-inset-left)) max(12px, env(safe-area-inset-bottom));
-          pointer-events: none;
-        }
-        .wrap:fullscreen .controls button {
-          flex: 0 1 auto;
-          min-width: clamp(76px, 12vw, 112px);
-          min-height: clamp(52px, 13vh, 68px);
-          padding: 8px 10px;
-          font-size: clamp(12px, 3vw, 16px);
-          background: #142747bb;
-          backdrop-filter: blur(4px);
-          pointer-events: auto;
+        .controls .cluster button {
+          flex-basis: 40px;
+          min-width: 34px;
+          min-height: 36px;
+          font-size: 9px;
         }
       }
       @media (pointer: coarse) {
         .controls {
           display: flex;
-          flex-direction: column;
-        }
-        .wrap:fullscreen .controls {
-          inset: 0;
-          display: block;
-        }
-        .wrap:fullscreen header {
-          position: absolute;
-          z-index: 2;
-          inset: 0;
-          margin: 0;
-          padding: 0;
-          border: 0;
-          border-radius: 0;
-          background: transparent;
-          box-shadow: none;
-          pointer-events: none;
-        }
-        .wrap:fullscreen h1,
-        .wrap:fullscreen #musicToggle,
-        .wrap:fullscreen .music-volume,
-        .wrap:fullscreen #skinToggle,
-        .wrap:fullscreen #laserSkinToggle,
-        .wrap:fullscreen #shieldToggle,
-        .wrap:fullscreen #onlineToggle {
-          display: none;
-        }
-        .wrap:fullscreen .hud {
-          position: absolute;
-          top: max(8px, env(safe-area-inset-top));
-          right: 52px;
-          left: max(8px, env(safe-area-inset-left));
-          display: flex;
-          justify-content: flex-start;
-          direction: ltr;
-          gap: 4px;
-          pointer-events: none;
-        }
-        .wrap:fullscreen .pill {
-          min-height: 38px;
-          padding: 7px 10px;
-          border-color: #53769aaa;
-          background: #101c34bb;
-          font-size: clamp(11px, 3vw, 15px);
-          backdrop-filter: blur(4px);
-        }
-        .wrap:fullscreen .hud .pill:nth-child(1),
-        .wrap:fullscreen .hud .pill:nth-child(4) {
-          display: none;
-        }
-        .wrap:fullscreen #fullscreenToggle {
-          position: absolute;
-          top: max(10px, env(safe-area-inset-top));
-          right: max(10px, env(safe-area-inset-right));
-          bottom: auto;
-          left: auto;
-          width: 36px;
-          min-height: 34px;
-          padding: 5px 8px;
-          overflow: hidden;
-          font-size: 0;
-          transform: none;
-          pointer-events: auto;
-        }
-        .wrap:fullscreen #fullscreenToggle::after {
-          content: "⛶";
-          font-size: 18px;
-        }
-        .wrap:fullscreen .hud .pill:nth-child(2),
-        .wrap:fullscreen .hud .pill:nth-child(3) {
-          display: block;
-        }
-        .wrap:fullscreen .controls .cluster {
-          position: absolute;
-          bottom: max(12px, env(safe-area-inset-bottom));
-          display: grid;
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-          gap: 6px;
-          margin: 0;
-          direction: ltr;
-        }
-        .wrap:fullscreen .controls .cluster:first-child {
-          left: max(10px, env(safe-area-inset-left));
-          width: clamp(128px, 36vw, 180px);
-        }
-        .wrap:fullscreen .controls [data-key="left"] {
-          grid-column: 1;
-        }
-        .wrap:fullscreen .controls [data-key="right"] {
-          grid-column: 2;
-        }
-        .wrap:fullscreen .controls .cluster:last-child {
-          right: max(10px, env(safe-area-inset-right));
-          width: clamp(152px, 44vw, 220px);
-        }
-        .wrap:fullscreen .controls button {
-          min-width: 0;
-          min-height: clamp(42px, 8vh, 58px);
-          padding: 6px 4px;
-          font-size: clamp(11px, 3vw, 15px);
-        }
-      }
-      @media (orientation: landscape) and (pointer: coarse) and (max-height: 600px) {
-        .wrap:fullscreen {
-          padding: 0;
-        }
-        .wrap:fullscreen header {
-          top: max(6px, env(safe-area-inset-top));
-          right: max(8px, env(safe-area-inset-right));
-          left: max(8px, env(safe-area-inset-left));
-          flex-direction: row;
-        }
-        .wrap:fullscreen .hud {
-          gap: 4px;
-          flex-wrap: nowrap;
-        }
-        .wrap:fullscreen .pill,
-        .wrap:fullscreen #musicToggle {
-          min-height: 36px;
-          padding: 6px 9px;
-          font-size: clamp(11px, 2vw, 14px);
-        }
-        .wrap:fullscreen .controls {
-          inset: 0;
-          display: block;
-          pointer-events: none;
-        }
-        .wrap:fullscreen .controls .cluster {
-          position: absolute;
-          bottom: max(12px, env(safe-area-inset-bottom));
-          display: grid;
-          grid-template-columns: repeat(2, minmax(76px, 1fr));
-          width: clamp(160px, 22vw, 230px);
-          gap: 7px;
-          direction: ltr;
-        }
-        .wrap:fullscreen .controls .cluster:first-child {
-          left: max(12px, env(safe-area-inset-left));
-          margin: 0;
-        }
-        .wrap:fullscreen .controls .cluster:last-child {
-          right: max(12px, env(safe-area-inset-right));
-          width: clamp(180px, 28vw, 280px);
-          margin: 0;
-        }
-        .wrap:fullscreen .controls button {
-          min-width: 0;
-          min-height: clamp(50px, 13vh, 64px);
-          padding: 7px 5px;
-          font-size: clamp(12px, 2.5vw, 15px);
         }
       }
     </style>
@@ -553,23 +574,14 @@
   <body>
     <div class="wrap">
       <header>
-        <h1>KERNEL</h1>
         <div class="hud">
-          <div class="pill">⚛ الذرات: <span id="atoms">0</span> / 70</div>
-          <div class="pill">❤ القلوب: <span id="hp">5</span> / 5</div>
-          <div class="pill">🪐 الكوكب: <span id="planet">1 / 7</span></div>
-          <div class="pill">💾 نقطة الحفظ: <span id="checkpoint">عطارد</span></div>
-          <button class="music-toggle" id="musicToggle" type="button" aria-pressed="false">🎵 تشغيل الموسيقى</button>
-          <label class="music-volume">🔊 مستوى الصوت
-            <input id="musicVolume" type="range" min="0" max="1" step="0.01" value="0.35" aria-label="مستوى صوت الموسيقى" />
-            <output id="musicVolumeLabel" for="musicVolume">35%</output>
-          </label>
-          <button class="music-toggle" id="skinToggle" type="button" aria-expanded="false">👩‍🚀 الأزياء</button>
-          <button class="music-toggle" id="laserSkinToggle" type="button">🔫 سكن الليزر: نبض البلازما</button>
-          <button class="music-toggle" id="shieldToggle" type="button" aria-label="تفعيل الدرع">🛡 درع (Q)</button>
-          <button class="music-toggle" id="onlineToggle" type="button" aria-expanded="false">👥 العب مع صديق</button>
-          <button class="music-toggle" id="fullscreenToggle" type="button" aria-pressed="false">⛶ ملء الشاشة</button>
+          <div class="pill">🪐 <span id="planet">1 / 7</span></div>
+          <div class="pill">⚛ الذرات: <span class="stat-value"><span id="atoms">0</span> / 70</span></div>
+          <div class="pill" id="onlinePlayersBadge" hidden>👥 اللاعبون: <span id="onlinePlayersCount">1 / 2</span></div>
+          <div hidden><span id="hp">5</span><span id="checkpoint">عطارد</span></div>
         </div>
+        <button class="music-toggle" id="fullscreenToggle" type="button" aria-label="ملء الشاشة" title="ملء الشاشة">⛶</button>
+        <button class="music-toggle" id="menuOpen" type="button" aria-expanded="true">☰ القائمة</button>
       </header>
       <canvas
         id="game"
@@ -577,12 +589,124 @@
         height="540"
         aria-label="لعبة KERNEL"
       ></canvas>
-      <div class="help">
-        <span
-          >الكمبيوتر: A / ← شمال • D / → يمين • Space / ↑ قفز (مرتين في زحل) • Q درع • كليك يسار هجوم •
-          1 ليزر • 2 سيف • Enter هجوم</span
-        ><span>اجمع الذرات الـ70 واعثر على النواة في الكوكب المجهول!</span>
-      </div>
+      <section class="main-menu" id="mainMenu" role="dialog" aria-modal="true" aria-label="قائمة لعبة KERNEL">
+        <div class="menu-card">
+          <div class="menu-screen" data-menu-screen="home">
+            <h2>KERNEL</h2>
+            <p>مغامرة فضائية — اختر مغامرتك وابدأ اللعب.</p>
+            <div class="menu-actions">
+              <button class="menu-primary" id="menuPlay" type="button">▶ العب</button>
+              <button id="menuSettings" type="button">⚙ الإعدادات</button>
+              <button id="menuResume" type="button" hidden>متابعة اللعب</button>
+              <button class="menu-exit" id="menuExit" type="button" hidden>خروج للقائمة الرئيسية</button>
+            </div>
+          </div>
+          <div class="menu-screen" data-menu-screen="modes" hidden>
+            <h2>اختر طور اللعب</h2>
+            <div class="menu-actions">
+              <button class="menu-primary" id="menuStory" type="button">📖 طور القصة</button>
+              <button id="menuMultiplayer" type="button">👥 جماعي</button>
+            </div>
+            <button class="menu-back" data-menu-back="home" type="button">رجوع</button>
+          </div>
+          <div class="menu-screen" data-menu-screen="multiplayer" hidden>
+            <h2>اختر نمط اللعب</h2>
+            <div class="mode-options">
+              <button class="mode-card" id="menuCoop" type="button">
+                <span class="mode-icon">🚀</span><span>تختيم تعاوني</span><small>كمّلوا القصة معًا</small>
+              </button>
+              <button class="mode-card" id="menuBattle" type="button">
+                <span class="mode-icon">⚔️</span><span>قتال</span><small>آخر لاعب حي يفوز</small>
+              </button>
+            </div>
+            <button class="menu-back" data-menu-back="modes" type="button">رجوع</button>
+          </div>
+          <div class="menu-screen" data-menu-screen="coop-settings" hidden>
+            <h2>إعدادات التختيم التعاوني</h2>
+            <p>العبوا الحملة واجمعوا الذرات واهزموا الزعيم سويًا.</p>
+            <div class="menu-actions">
+              <button class="menu-primary" id="coopRoomSettings" type="button">إعداد الغرفة واللاعبين</button>
+            </div>
+            <button class="menu-back" data-menu-back="multiplayer" type="button">رجوع لاختيار النمط</button>
+          </div>
+          <div class="menu-screen" data-menu-screen="battle-settings" hidden>
+            <h2>إعدادات القتال</h2>
+            <p>اهزم خصومك؛ آخر لاعب يبقى حيًا هو الفائز.</p>
+            <div class="menu-actions">
+              <button class="menu-primary" id="battleRoomSettings" type="button">إعداد الغرفة واللاعبين</button>
+            </div>
+            <button class="menu-back" data-menu-back="multiplayer" type="button">رجوع لاختيار النمط</button>
+          </div>
+          <div class="menu-screen" data-menu-screen="room-settings" hidden>
+            <h2 id="roomSettingsTitle">إعدادات الغرفة</h2>
+            <p id="roomSettingsDescription">اختر العدد المطلوب ثم أنشئ الغرفة.</p>
+            <label class="menu-settings">عدد اللاعبين
+              <select id="playerCount" aria-label="عدد اللاعبين المطلوب">
+                <option value="2">لاعبان</option>
+                <option value="3">3 لاعبين</option>
+                <option value="4">4 لاعبين</option>
+                <option value="5">5 لاعبين</option>
+              </select>
+            </label>
+            <p class="online-status">تدعم الغرفة حتى 5 لاعبين؛ المضيف يبدأ المباراة بعد اكتمال العدد المحدد.</p>
+            <button class="menu-primary" id="createRoom" type="button">إنشاء غرفة</button>
+            <div class="online-panel" id="onlinePanel">
+              <div class="room-code" id="roomCodeDisplay" hidden></div>
+              <button id="copyRoomLink" type="button" hidden>نسخ رابط الغرفة</button>
+              <label>رمز الصديق <input id="roomCode" maxlength="6" inputmode="numeric" placeholder="123456" /></label>
+              <button id="joinRoom" type="button">انضمام</button>
+              <button id="startOnlineMatch" type="button" disabled>ابدأ المباراة</button>
+              <span class="online-status" id="onlineStatus">سيتم اختيار خادم الاتصال تلقائيًا.</span>
+            </div>
+            <button class="menu-back" data-menu-back="coop-settings" id="roomSettingsBack" type="button">رجوع للإعدادات</button>
+          </div>
+          <div class="menu-screen" data-menu-screen="settings" hidden>
+            <h2>الإعدادات</h2>
+            <div class="menu-settings">
+              <section class="sound-section" aria-label="إعدادات الموسيقى">
+                <h3>🎵 الموسيقى</h3>
+                <div class="menu-setting-row">
+                <button class="music-toggle" id="musicToggle" type="button" aria-pressed="false">🎵 تشغيل الموسيقى</button>
+                <label class="music-volume">🔊 مستوى الموسيقى
+                  <input id="musicVolume" type="range" min="0" max="1" step="0.01" value="0.35" aria-label="مستوى صوت الموسيقى" />
+                  <output id="musicVolumeLabel" for="musicVolume">35%</output>
+                </label>
+                </div>
+              </section>
+              <section class="sound-section" aria-label="إعدادات المؤثرات الصوتية">
+                <h3>✨ المؤثرات الصوتية</h3>
+                <label class="music-volume">🔊 مستوى المؤثرات
+                  <input id="effectsVolume" type="range" min="0" max="1" step="0.01" value="0.7" aria-label="مستوى صوت المؤثرات" />
+                  <output id="effectsVolumeLabel" for="effectsVolume">70%</output>
+                </label>
+              </section>
+              <div class="menu-setting-row">
+                <button class="music-toggle" id="skinToggle" type="button" aria-expanded="false">👩‍🚀 اختيار الشخصية</button>
+                <button class="music-toggle" id="laserSkinToggle" type="button" aria-expanded="false">🔫 اختيار المسدس</button>
+                <button class="music-toggle" id="downloadToggle" type="button"><span>⬇ تنزيل النسخة</span></button>
+              </div>
+              <div class="skin-panel" id="skinPanel" hidden>
+                <button class="skin-choice" data-skin="0"><span class="skin-preview" style="--suit-color:#eaf3fa;--suit-trim:#58d8ed">👩‍🚀</span><span>رائد فضاء</span></button>
+                <button class="skin-choice" data-skin="1"><span class="skin-preview" style="--suit-color:#c5d5e5;--suit-trim:#f0783f">👨‍🚀</span><span>حارس المريخ</span></button>
+                <button class="skin-choice" data-skin="2"><span class="skin-preview" style="--suit-color:#d7f0d4;--suit-trim:#63ce9b">🧑‍🚀</span><span>كشّاف أورانوس</span></button>
+                <button class="skin-choice" data-skin="3"><span class="skin-preview" style="--suit-color:#c8c2ee;--suit-trim:#b078ff">👩‍🚀</span><span>ظلّ نبتون</span></button>
+                <button class="skin-choice selected" data-skin="4"><span class="skin-preview" style="--suit-color:#f0e2bd;--suit-trim:#ffc94f">👨‍🚀</span><span>رائد الصديق</span></button>
+              </div>
+              <div class="laser-skin-panel" id="laserSkinPanel" hidden>
+                <button class="laser-skin-choice selected" data-laser-skin="0"><span class="laser-preview" style="--weapon-color:#79faff">🔫</span><span>نبض البلازما</span></button>
+                <button class="laser-skin-choice" data-laser-skin="1"><span class="laser-preview" style="--weapon-color:#ffd166">🔫</span><span>شعاع الشمس</span></button>
+                <button class="laser-skin-choice" data-laser-skin="2"><span class="laser-preview" style="--weapon-color:#b98cff">🔫</span><span>سمّ نبتون</span></button>
+                <button class="laser-skin-choice" data-laser-skin="3"><span class="laser-preview" style="--weapon-color:#ff795e">🔫</span><span>لهب المريخ</span></button>
+              </div>
+              <div class="story">
+                <b>مهمة KERNEL:</b> أرسلتك شركة MOJO في مهمة فضائية. دمّر الفضائيون الأرض ونثروا ذراتها على كواكب المجموعة الشمسية، وأخفوا النواة في كوكب مجهول. اجمع الذرات، اهزم الزعيم، وأعد الحياة من جديد!
+              </div>
+              <p>التحكم: A / ← و D / → للحركة، Space / ↑ للقفز، Q للدرع، 1 ليزر، 2 سيف، و Enter للهجوم.</p>
+            </div>
+            <button class="menu-back" data-menu-back="home" type="button">رجوع للقائمة</button>
+          </div>
+        </div>
+      </section>
       <div class="controls">
         <div class="cluster">
           <button data-key="left">◀ شمال</button
@@ -595,41 +719,8 @@
           ><button id="shieldTouch" type="button">🛡 درع</button>
         </div>
       </div>
-      <div class="story">
-        <b>مهمة KERNEL:</b> أرسلتك شركة MOJO في مهمة فضائية. وأنت على أحد الكواكب، دمّر
-        الفضائيون الأرض ونثروا ذراتها على كواكب المجموعة الشمسية، بينما أخفوا النواة في كوكب
-        مجهول. اجمع الذرات، اعثر على النواة بعد هزيمة الزعيم، وأعد الحياة من جديد!
-      </div>
-      <div class="skin-panel" id="skinPanel" hidden>
-        <button class="skin-choice" data-skin="0">رائد فضاء</button>
-        <button class="skin-choice" data-skin="1">حارس المريخ</button>
-        <button class="skin-choice" data-skin="2">كشّاف أورانوس</button>
-        <button class="skin-choice" data-skin="3">ظلّ نبتون</button>
-        <button class="skin-choice selected" data-skin="4">رائد الصديق</button>
-      </div>
-      <div class="online-panel" id="onlinePanel" hidden>
-        <label>نمط اللعب
-          <select id="multiplayerMode">
-            <option value="coop">تعاون — اختموا اللعبة معًا</option>
-            <option value="pvp">قتال PVP — أول من يسجل 5 نقاط</option>
-          </select>
-        </label>
-        <button id="createRoom" type="button">إنشاء غرفة</button>
-        <label>رمز الصديق <input id="roomCode" maxlength="6" inputmode="numeric" placeholder="123456" /></label>
-        <button id="joinRoom" type="button">انضمام</button>
-        <button id="copyRoomLink" type="button" hidden>نسخ رابط الغرفة</button>
-        <span class="online-status" id="onlineStatus">سيتم اختيار خادم الاتصال تلقائيًا.</span>
-      </div>
+      <div class="spectator-notice" id="spectatorNotice" hidden>خرجت من القتال — أنت الآن متفرج</div>
       <div class="challenge-label" id="challengeLabel">تحدي الكوكب: اجمع الذرات وتفادَ الأعداء.</div>
-      <div class="jupiter-choice" id="jupiterChoice" hidden>
-        منصات المشتري:
-        <select id="jupiterPlatformMode" aria-label="اختيار نوع منصات المشتري">
-          <option value="mixed">متنوعة: متحركة وتنهار</option>
-          <option value="moving">متحركة</option>
-          <option value="crumbling">تنهار</option>
-          <option value="stable">ثابتة</option>
-        </select>
-      </div>
     </div>
     <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
     <audio id="backgroundMusic" src="music.mp3" loop preload="auto"></audio>
@@ -639,6 +730,10 @@
           ctx = c.getContext("2d"),
           W = c.width,
           H = c.height;
+        let viewportWidth = W,
+          viewportHeight = H,
+          cameraX = 0,
+          cameraY = 0;
         const atomsEl = document.getElementById("atoms"),
           hpEl = document.getElementById("hp"),
           planetEl = document.getElementById("planet"),
@@ -647,15 +742,64 @@
         const backgroundMusic = document.getElementById("backgroundMusic");
         const musicVolumeControl = document.getElementById("musicVolume");
         const musicVolumeLabel = document.getElementById("musicVolumeLabel");
+        const effectsVolumeControl = document.getElementById("effectsVolume");
+        const effectsVolumeLabel = document.getElementById("effectsVolumeLabel");
+        const controlsElement = document.querySelector(".controls");
+        const spectatorNotice = document.getElementById("spectatorNotice");
         const skinToggle = document.getElementById("skinToggle");
         const laserSkinToggle = document.getElementById("laserSkinToggle");
-        const shieldToggle = document.getElementById("shieldToggle");
         const shieldTouch = document.getElementById("shieldTouch");
         const skinPanel = document.getElementById("skinPanel");
-        const onlineToggle = document.getElementById("onlineToggle");
+        const laserSkinPanel = document.getElementById("laserSkinPanel");
         const onlinePanel = document.getElementById("onlinePanel");
-        const fullscreenToggle = document.getElementById("fullscreenToggle");
-        const gameWrap = document.querySelector(".wrap");
+        const downloadToggle = document.getElementById("downloadToggle");
+        const mainMenu = document.getElementById("mainMenu");
+        const menuScreens = [...document.querySelectorAll("[data-menu-screen]")];
+        const playerCountSelect = document.getElementById("playerCount");
+        const onlinePlayersBadge = document.getElementById("onlinePlayersBadge");
+        const onlinePlayersCount = document.getElementById("onlinePlayersCount");
+        const roomCodeDisplay = document.getElementById("roomCodeDisplay");
+        const roomSettingsTitle = document.getElementById("roomSettingsTitle");
+        const roomSettingsDescription = document.getElementById("roomSettingsDescription");
+        const roomSettingsBack = document.getElementById("roomSettingsBack");
+        function showMenu(screen) {
+          mainMenu.hidden = false;
+          document.getElementById("menuOpen").setAttribute("aria-expanded", "true");
+          document.getElementById("menuResume").hidden = mode === "credits";
+          document.getElementById("menuExit").hidden = mode === "credits";
+          keys.left = false;
+          keys.right = false;
+          keys.jump = false;
+          stopMusic();
+          menuScreens.forEach((element) => {
+            element.hidden = element.dataset.menuScreen !== screen;
+          });
+        }
+        function showRoomSettings(gameMode) {
+          multiplayerMode = gameMode;
+          roomSettingsTitle.textContent =
+            gameMode === "pvp" ? "إعدادات غرفة القتال" : "إعدادات غرفة التختيم التعاوني";
+          roomSettingsDescription.textContent =
+            gameMode === "pvp"
+              ? "آخر لاعب يبقى حيًا يفوز. اختر العدد المطلوب ثم أنشئ الغرفة."
+              : "العبوا الحملة معًا. اختر العدد المطلوب ثم أنشئ الغرفة.";
+          roomSettingsBack.dataset.menuBack =
+            gameMode === "pvp" ? "battle-settings" : "coop-settings";
+          onlinePanel.hidden = false;
+          roomCodeDisplay.hidden = true;
+          showMenu("room-settings");
+        }
+        function hideMenu() {
+          mainMenu.hidden = true;
+          document.getElementById("menuOpen").setAttribute("aria-expanded", "false");
+          skinPanel.hidden = true;
+          laserSkinPanel.hidden = true;
+          onlinePanel.hidden = true;
+          skinToggle.setAttribute("aria-expanded", "false");
+          laserSkinToggle.setAttribute("aria-expanded", "false");
+          if (["play", "boss", "pvp", "travel", "ending", "launch", "intro"].includes(mode))
+            startMusic();
+        }
         function resizeCanvasForDisplay() {
           const { width, height } = c.getBoundingClientRect();
           if (!width || !height) return;
@@ -674,17 +818,47 @@
             c.width = pixelWidth;
             c.height = pixelHeight;
           }
-          const scaleX = pixelWidth / W;
-          const scaleY = pixelHeight / H;
-          ctx.setTransform(scaleX, 0, 0, scaleY, 0, 0);
+          const scale = Math.max(pixelWidth / W, pixelHeight / H);
+          viewportWidth = pixelWidth / scale;
+          viewportHeight = pixelHeight / scale;
+          ctx.setTransform(scale, 0, 0, scale, 0, 0);
         }
         resizeCanvasForDisplay();
         window.addEventListener("resize", resizeCanvasForDisplay);
+        function updateCamera(snap = false) {
+          if (!player) return;
+          let cameraTarget = player;
+          const localState = mode === "pvp" && pvpState && pvpState.players[localPlayerId];
+          if (localState && !localState.alive) {
+            const alivePlayerId = Object.keys(pvpState.players).find(
+              (id) => id !== localPlayerId && pvpState.players[id].alive,
+            );
+            const alivePlayer = alivePlayerId && remotePlayers.get(alivePlayerId);
+            if (alivePlayer) cameraTarget = alivePlayer;
+          }
+          const minX = Math.min(0, W - viewportWidth);
+          const maxX = Math.max(0, W - viewportWidth);
+          const minY = Math.min(0, H - viewportHeight);
+          const maxY = Math.max(0, H - viewportHeight);
+          const targetX = Math.max(
+            minX,
+            Math.min(maxX, cameraTarget.x + cameraTarget.w / 2 - viewportWidth / 2),
+          );
+          const targetY = Math.max(
+            minY,
+            Math.min(maxY, cameraTarget.y + cameraTarget.h / 2 - viewportHeight / 2),
+          );
+          if (snap) {
+            cameraX = targetX;
+            cameraY = targetY;
+          } else {
+            cameraX += (targetX - cameraX) * 0.16;
+            cameraY += (targetY - cameraY) * 0.16;
+          }
+        }
         const onlineStatus = document.getElementById("onlineStatus");
         const copyRoomLink = document.getElementById("copyRoomLink");
-        const multiplayerModeSelect = document.getElementById("multiplayerMode");
-        const jupiterChoice = document.getElementById("jupiterChoice");
-        const jupiterPlatformMode = document.getElementById("jupiterPlatformMode");
+        const jupiterPlatformMode = { value: "mixed" };
         const challengeLabel = document.getElementById("challengeLabel");
         const names = [
           "عطارد",
@@ -784,11 +958,13 @@
           enemies = [],
           enemyShots = [],
           particles = [],
+          muzzleFlashes = [],
           hazards = [],
           boss = null,
           bossCore = null,
           cameraShake = 0;
         const savedMusicVolume = localStorage.getItem("kernel-music-volume-v1");
+        const savedEffectsVolume = localStorage.getItem("kernel-effects-volume-v1");
         let soundContext = null;
         let musicVolume =
           savedMusicVolume === null || !Number.isFinite(Number(savedMusicVolume))
@@ -797,6 +973,12 @@
         backgroundMusic.volume = musicVolume;
         musicVolumeControl.value = String(musicVolume);
         musicVolumeLabel.textContent = Math.round(musicVolume * 100) + "%";
+        let effectsVolume =
+          savedEffectsVolume === null || !Number.isFinite(Number(savedEffectsVolume))
+            ? 0.7
+            : Math.max(0, Math.min(1, Number(savedEffectsVolume)));
+        effectsVolumeControl.value = String(effectsVolume);
+        effectsVolumeLabel.textContent = Math.round(effectsVolume * 100) + "%";
         let musicEnabled = true;
         let mode = "credits",
           message = "مستعد؟ انطلق في رحلتك الفضائية!",
@@ -811,19 +993,28 @@
           laserSkinIndex = 0,
           peer = null,
           peerConnection = null,
+          peerConnections = new Map(),
+          pendingConnections = new Set(),
           peerRole = "",
           remotePlayer = null,
+          remotePlayers = new Map(),
+          localPlayerId = "host",
+          roomPlayerLimit = 2,
+          roomConnectedCount = 1,
+          nextGuestNumber = 1,
           worldLayoutReady = true,
           netFrame = 0,
           multiplayerMode = "coop",
           pvpState = null,
           currentRoomCode = "";
+          onlinePlayersBadge.hidden = true;
+          playerCountSelect.disabled = false;
         const roomParams = new URLSearchParams(window.location.search);
         const sharedRoomCode = roomParams.get("room");
         if (sharedRoomCode && /^\d{6}$/.test(sharedRoomCode)) {
           document.getElementById("roomCode").value = sharedRoomCode;
+          showRoomSettings(roomParams.get("mode") === "pvp" ? "pvp" : "coop");
           onlinePanel.hidden = false;
-          onlineToggle.setAttribute("aria-expanded", "true");
         }
         const platforms = [
           { x: 0, y: 475, w: 960, h: 65 },
@@ -831,6 +1022,34 @@
           { x: 405, y: 325, w: 150, h: 18 },
           { x: 665, y: 390, w: 150, h: 18 },
         ];
+        const pvpArenas = [
+          {
+            name: "الساحة النجمية",
+            colors: ["#11152e", "#25203a", "#475168", "#e9c873"],
+            platforms: [[0, 485, 960, 55], [150, 385, 155, 18], [405, 320, 150, 18], [655, 385, 155, 18]],
+          },
+          {
+            name: "ساحة الشُهب",
+            colors: ["#2b1533", "#54284a", "#55324c", "#ff9b73"],
+            platforms: [[0, 485, 960, 55], [90, 395, 180, 18], [390, 350, 180, 18], [690, 395, 180, 18]],
+          },
+          {
+            name: "ساحة الجليد",
+            colors: ["#102b3c", "#1a5260", "#345c70", "#9aefff"],
+            platforms: [[0, 485, 960, 55], [75, 410, 175, 18], [395, 365, 170, 18], [710, 410, 175, 18]],
+          },
+          {
+            name: "ساحة الكسوف",
+            colors: ["#19172f", "#34304f", "#3c405d", "#b99aff"],
+            platforms: [[0, 485, 960, 55], [115, 370, 175, 18], [395, 415, 170, 18], [670, 370, 175, 18]],
+          },
+          {
+            name: "ساحة البرق",
+            colors: ["#251c18", "#49372a", "#5a4935", "#ffd166"],
+            platforms: [[0, 485, 960, 55], [80, 405, 190, 18], [345, 340, 190, 18], [690, 405, 190, 18]],
+          },
+        ];
+        let pvpArenaIndex = 0;
         function resetPlayer() {
           player = {
             x: 65,
@@ -865,8 +1084,14 @@
           checkpointEl.textContent = names[value - 1];
         }
         function updateLaserSkinButton() {
-          laserSkinToggle.textContent = "🔫 سكن الليزر: " + laserSkins[laserSkinIndex].name;
+          laserSkinToggle.textContent = "🔫 " + laserSkins[laserSkinIndex].name;
           laserSkinToggle.setAttribute("aria-label", "سكن مسدس الليزر، الحالي: " + laserSkins[laserSkinIndex].name);
+          document.querySelectorAll(".laser-skin-choice").forEach((button) => {
+            button.classList.toggle(
+              "selected",
+              Number(button.dataset.laserSkin) === laserSkinIndex,
+            );
+          });
         }
         function say(s, t = 160) {
           message = s;
@@ -880,6 +1105,7 @@
           return soundContext;
         }
         function playSoundEffect(kind) {
+          if (effectsVolume <= 0) return;
           const audio = ensureSoundContext();
           if (!audio) return;
           const now = audio.currentTime;
@@ -897,7 +1123,7 @@
             now + duration,
           );
           gain.gain.setValueAtTime(0.0001, now);
-          gain.gain.linearRampToValueAtTime(0.12, now + 0.012);
+          gain.gain.linearRampToValueAtTime(0.12 * effectsVolume, now + 0.012);
           gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
           oscillator.connect(gain);
           gain.connect(audio.destination);
@@ -905,7 +1131,7 @@
           oscillator.stop(now + duration);
         }
         function gameInputBlocked() {
-          return !skinPanel.hidden || !onlinePanel.hidden;
+          return !mainMenu.hidden || !skinPanel.hidden || !laserSkinPanel.hidden || !onlinePanel.hidden;
         }
         function startMusic() {
           if (!musicEnabled) return;
@@ -948,8 +1174,23 @@
             pickups = [];
             enemies = [];
             hazards = [];
+            platforms.forEach((platform, index) => {
+              const bossArena = [
+                [0, 475, 960, 65],
+                [105, 420, 180, 18],
+                [325, 385, 180, 18],
+                [0, 475, 960, 65],
+              ][index];
+              platform.x = bossArena[0];
+              platform.baseX = bossArena[0];
+              platform.y = bossArena[1];
+              platform.w = bossArena[2];
+              platform.h = bossArena[3];
+              platform.moving = false;
+              platform.crumbling = false;
+              platform.broken = false;
+            });
             challengeLabel.textContent = planetChallenges[7];
-            jupiterChoice.hidden = true;
             resetPlayer();
             boss = {
               x: 690,
@@ -960,25 +1201,15 @@
               dashTimer: 0,
               cooldown: 70,
               dashDirection: 1,
+              minX: 90,
+              maxX: W - 200,
               pulseTimer: 100,
             };
             mode = "boss";
-            say("وصلت إلى الكوكب المجهول! اهزم ملك الثقب لإنقاذ المجرة.", 210);
+            say("وصلت إلى الكوكب المجهول! اهزم ملك الثقب لإنقاذ المجرة.", 90);
             return;
           }
-          if (planet === 4) {
-            const labels = {
-              mixed: "متنوعة",
-              moving: "متحركة",
-              crumbling: "تنهار",
-              stable: "ثابتة",
-            };
-            challengeLabel.textContent =
-              planetChallenges[planet - 1] + " نوع المنصات: " + labels[jupiterPlatformMode.value] + ".";
-          } else {
-            challengeLabel.textContent = planetChallenges[planet - 1];
-          }
-          jupiterChoice.hidden = planet !== 4;
+          challengeLabel.textContent = planetChallenges[planet - 1];
           if (planet === 1) {
             hazards = [
               { type: "lava", x: 305, w: 86 },
@@ -1175,60 +1406,205 @@
           onlineStatus.textContent = text;
         }
         function resetPeerSession() {
-          const previousConnection = peerConnection;
           const previousPeer = peer;
           peer = null;
           peerConnection = null;
+          peerConnections.forEach((connection) => connection.close());
+          peerConnections.clear();
+          pendingConnections.clear();
           peerRole = "";
           remotePlayer = null;
-          multiplayerModeSelect.disabled = false;
-          if (previousConnection) previousConnection.close();
+          remotePlayers.clear();
+          localPlayerId = "host";
+          roomPlayerLimit = 2;
+          roomConnectedCount = 1;
+          nextGuestNumber = 1;
+          document.getElementById("startOnlineMatch").disabled = true;
+          document.getElementById("createRoom").disabled = false;
+          document.getElementById("joinRoom").disabled = false;
+          copyRoomLink.hidden = true;
+          roomCodeDisplay.hidden = true;
+          currentRoomCode = "";
           if (previousPeer) previousPeer.destroy();
         }
         function makeRoomInviteLink(code) {
           const invite = new URL(window.location.href);
           invite.searchParams.set("room", code);
+          invite.searchParams.set("mode", multiplayerMode);
           invite.searchParams.delete("peerServer");
           invite.searchParams.delete("peerFallback");
           return invite.href;
         }
         function sendPeerData(data) {
-          if (!peerConnection || !peerConnection.open) return;
-          peerConnection.send(data);
+          if (peerRole === "host") {
+            peerConnections.forEach((connection) => {
+              if (connection.open) connection.send(data);
+            });
+          } else if (peerConnection && peerConnection.open) {
+            peerConnection.send(data);
+          }
         }
         function sendOnlineSession() {
           if (peerRole === "host") {
-            sendPeerData({ type: "session", gameMode: multiplayerMode });
+            peerConnections.forEach((connection) => {
+              if (connection.open)
+                connection.send({
+                  type: "session",
+                  gameMode: multiplayerMode,
+                  playerId: connection.playerId,
+                  playerCount: roomPlayerLimit,
+                      connectedCount: connectedPlayerCount(),
+                });
+            });
           }
         }
+        function updateRemotePlayer(id, data) {
+          if (!id || id === localPlayerId || !data || !Number.isFinite(data.x) || !Number.isFinite(data.y))
+            return;
+          let remote = remotePlayers.get(id);
+          if (!remote) {
+            remote = { x: data.x, y: data.y, w: 34, h: 52 };
+            remotePlayers.set(id, remote);
+          }
+          remote.targetX = Math.max(0, Math.min(W - 34, data.x));
+          remote.targetY = Math.max(0, Math.min(H, data.y));
+          remote.face = data.face === -1 ? -1 : 1;
+          remote.skin = Number.isInteger(data.skin) ? Math.max(0, Math.min(4, data.skin)) : 4;
+          remote.weapon = data.weapon === "sword" ? "sword" : "laser";
+          remote.laserSkinIndex =
+            Number.isInteger(data.laserSkinIndex) &&
+            data.laserSkinIndex >= 0 &&
+            data.laserSkinIndex < laserSkins.length
+              ? data.laserSkinIndex
+              : 0;
+          remote.planet = Number.isInteger(data.planet) ? data.planet : 1;
+          remote.shieldTimer = Number.isFinite(data.shieldTimer) ? data.shieldTimer : 0;
+          remote.shieldHits = Number.isFinite(data.shieldHits) ? data.shieldHits : 0;
+          remote.name = id === "host" ? "المضيف" : "لاعب " + (Number(id.slice(5)) + 1 || 2);
+          remotePlayer = remotePlayers.values().next().value || null;
+        }
+        function applyNetworkPlayers(players) {
+          if (!players || typeof players !== "object") return;
+          const activePlayers = new Set(Object.keys(players));
+          remotePlayers.forEach((_remote, id) => {
+            if (!activePlayers.has(id)) remotePlayers.delete(id);
+          });
+          Object.entries(players).forEach(([id, state]) => {
+            if (!state || !Number.isFinite(state.x) || !Number.isFinite(state.y)) return;
+            if (id === localPlayerId) {
+              if (mode === "pvp") {
+                player.x += (state.x - player.x) * 0.18;
+                player.y += (state.y - player.y) * 0.18;
+              }
+              return;
+            }
+            updateRemotePlayer(id, state);
+          });
+          remotePlayer = remotePlayers.values().next().value || null;
+        }
+        function networkPlayerSnapshot() {
+          const snapshot = {};
+          const serialize = (source) => ({
+            x: source.x,
+            y: source.y,
+            face: source.face,
+            skin: source.skin,
+            weapon: source.weapon,
+            laserSkinIndex: source.laserSkinIndex,
+            shieldTimer: source.shieldTimer,
+            shieldHits: source.shieldHits,
+            planet: source.planet || planet,
+          });
+          snapshot.host = serialize({
+            x: player.x,
+            y: player.y,
+            face: player.face,
+            skin: selectedSkin,
+            weapon,
+            laserSkinIndex,
+            shieldTimer: player.shieldTimer,
+            shieldHits: player.shieldHits,
+          });
+          remotePlayers.forEach((remote, id) => {
+            snapshot[id] = serialize(remote);
+          });
+          return snapshot;
+        }
+        function connectedPlayerCount() {
+          return peerRole === "host"
+            ? 1 + [...peerConnections.values()].filter((connection) => connection.open).length
+            : roomConnectedCount;
+        }
+        function updateRoomStartButton() {
+          onlinePlayersBadge.hidden = !peerRole;
+          onlinePlayersCount.textContent = connectedPlayerCount() + " / " + roomPlayerLimit;
+          const canStart =
+            peerRole === "host" &&
+            connectedPlayerCount() === roomPlayerLimit &&
+            mode !== "pvp";
+          document.getElementById("startOnlineMatch").disabled = !canStart;
+        }
+        function roomPlayerStatus() {
+          return "اللاعبون المتصلون: " + connectedPlayerCount() + " / " + roomPlayerLimit;
+        }
+        async function createPeerClient(id) {
+          let options;
+          let transport = "خادم PeerJS الافتراضي";
+          try {
+            const response = await fetch(new URL("/healthz", window.location.href), {
+              cache: "no-store",
+            });
+            if (response.ok) {
+              const health = await response.json();
+              if (health.peerServer === true) {
+                options = {
+                  host: window.location.hostname,
+                  port: Number(window.location.port) || (window.location.protocol === "https:" ? 443 : 80),
+                  path: "/peerjs",
+                  secure: window.location.protocol === "https:",
+                };
+                transport = "خادم اللعبة";
+              }
+            }
+          } catch (error) {
+            console.warn("تعذّر فحص خادم PeerJS المحلي؛ سيتم استخدام الخادم الافتراضي.", error);
+          }
+          return {
+            client: new window.Peer(id, options),
+            transport,
+          };
+        }
         function drawRemoteAstronaut() {
-          if (!remotePlayer || remotePlayer.planet !== planet) return;
-          const localPlayer = player;
-          const localSkin = selectedSkin;
-          const localWeapon = weapon;
-          const localLaserSkin = laserSkinIndex;
-          player = remotePlayer;
-          selectedSkin = remotePlayer.skin;
-          weapon = remotePlayer.weapon || "laser";
-          laserSkinIndex = remotePlayer.laserSkinIndex || 0;
-          astronaut();
-          player = localPlayer;
-          selectedSkin = localSkin;
-          weapon = localWeapon;
-          laserSkinIndex = localLaserSkin;
-          if (remotePlayer.shieldTimer > 0 && remotePlayer.shieldHits > 0)
-            drawShieldBubble(remotePlayer);
-          ctx.fillStyle = "#ffffff";
-          ctx.font = "12px Tahoma";
-          ctx.textAlign = "center";
-          ctx.fillText("صديقك", remotePlayer.x + 17, remotePlayer.y - 7);
-          const remoteHp =
-            mode === "pvp" && pvpState
-              ? peerRole === "guest"
-                ? pvpState.hostHp
-                : pvpState.guestHp
-              : hp;
-          drawPlayerHeartCount(remotePlayer, remoteHp);
+          remotePlayers.forEach((remote, id) => {
+            if (mode === "pvp" && pvpState && pvpState.players[id] && !pvpState.players[id].alive)
+              return;
+            if (remote.planet !== planet) return;
+            const localPlayer = player;
+            const localSkin = selectedSkin;
+            const localWeapon = weapon;
+            const localLaserSkin = laserSkinIndex;
+            player = remote;
+            selectedSkin = remote.skin;
+            weapon = remote.weapon || "laser";
+            laserSkinIndex = remote.laserSkinIndex || 0;
+            astronaut();
+            player = localPlayer;
+            selectedSkin = localSkin;
+            weapon = localWeapon;
+            laserSkinIndex = localLaserSkin;
+            if (remote.shieldTimer > 0 && remote.shieldHits > 0)
+              drawShieldBubble(remote);
+            ctx.fillStyle = "#ffffff";
+            ctx.font = "12px Tahoma";
+            ctx.textAlign = "center";
+            ctx.fillText(remote.name || "صديق", remote.x + 17, remote.y - 7);
+            const remoteHp =
+              mode === "pvp" && pvpState
+                ? pvpState.players[id] && pvpState.players[id].hp
+                : hp;
+            drawPlayerHeartCount(remote, Number.isFinite(remoteHp) ? remoteHp : 5);
+          });
+          remotePlayer = remotePlayers.values().next().value || null;
         }
         function drawPlayerHeartCount(target, count) {
           const centerX = target.x + target.w / 2;
@@ -1273,7 +1649,16 @@
         }
         function applyWorldSnapshot(data) {
           if (peerRole !== "guest" || data.planet < 1 || data.planet > 8) return;
-          if (data.mode === "pvp" && mode !== "pvp") startPvpMatch();
+          if (
+            data.mode === "pvp" &&
+            data.pvp &&
+            (mode !== "pvp" || data.pvp.arenaIndex !== pvpArenaIndex)
+          ) {
+            startPvpMatch(
+              data.pvp.arenaIndex,
+              data.pvp.players && Object.keys(data.pvp.players),
+            );
+          }
           const validLayoutVariant =
             Number.isInteger(data.layoutVariant) &&
             data.layoutVariant >= 0 &&
@@ -1297,23 +1682,14 @@
             planetEl.textContent = planet === 8 ? "كوكب مجهول" : planet + " / 7";
             makeLevel();
             worldLayoutReady = true;
-          } else if (layoutChanged || platformModeChanged) {
+          } else if ((layoutChanged || platformModeChanged) && data.mode !== "pvp") {
             configurePlatforms();
             pickups.forEach((item, index) => {
               const platform = platforms[(index % 3) + 1];
               item.x = platform.x + 18 + (index % 3) * 38;
               item.y = platform.y - 22;
             });
-            if (planet === 4) {
-              const labels = {
-                mixed: "متنوعة",
-                moving: "متحركة",
-                crumbling: "تنهار",
-                stable: "ثابتة",
-              };
-              challengeLabel.textContent =
-                planetChallenges[3] + " نوع المنصات: " + labels[jupiterPlatformMode.value] + ".";
-            }
+            if (planet === 4) challengeLabel.textContent = planetChallenges[3];
           }
           if (Number.isFinite(data.atoms)) {
             atoms = Math.max(0, Math.min(70, data.atoms));
@@ -1384,45 +1760,13 @@
           }
           if (data.mode === "play" && mode === "travel") mode = "play";
           if (data.mode === "play" && mode === "intro") makeLevel();
+          if (data.players) applyNetworkPlayers(data.players);
           if (data.mode === "pvp" && pvpState && data.pvp) {
-            Object.assign(pvpState, {
-              hostScore: data.pvp.hostScore,
-              guestScore: data.pvp.guestScore,
-              hostHp: data.pvp.hostHp,
-              guestHp: data.pvp.guestHp,
-              winner: data.pvp.winner,
-            });
-            if (data.players) {
-              const hostPlayer = data.players.host;
-              const guestPlayer = data.players.guest;
-              const remote = peerRole === "guest" ? hostPlayer : guestPlayer;
-              const local = peerRole === "guest" ? guestPlayer : hostPlayer;
-              if (remote && Number.isFinite(remote.x) && Number.isFinite(remote.y)) {
-                if (!remotePlayer) remotePlayer = {};
-                Object.assign(remotePlayer, {
-                  w: 34,
-                  h: 52,
-                  targetX: remote.x,
-                  targetY: remote.y,
-                  face: remote.face === -1 ? -1 : 1,
-                  skin: Number.isInteger(remote.skin) ? remote.skin : 4,
-                  laserSkinIndex:
-                    Number.isInteger(remote.laserSkinIndex) &&
-                    remote.laserSkinIndex >= 0 &&
-                    remote.laserSkinIndex < laserSkins.length
-                      ? remote.laserSkinIndex
-                      : 0,
-                  weapon: remote.weapon === "sword" ? "sword" : "laser",
-                  planet: 1,
-                  shieldTimer: remote.shieldTimer || 0,
-                  shieldHits: remote.shieldHits || 0,
-                });
-              }
-              if (local && Number.isFinite(local.x) && Number.isFinite(local.y)) {
-                player.x += (local.x - player.x) * 0.18;
-                player.y += (local.y - player.y) * 0.18;
-              }
-            }
+            if (Number.isInteger(data.pvp.arenaIndex))
+              pvpState.arenaIndex = data.pvp.arenaIndex;
+            if (data.pvp.players && typeof data.pvp.players === "object")
+              pvpState.players = data.pvp.players;
+            pvpState.winner = typeof data.pvp.winner === "string" ? data.pvp.winner : "";
             if (Array.isArray(data.shots)) {
               shots = data.shots.filter((s) =>
                 s && Number.isFinite(s.x) && Number.isFinite(s.y) &&
@@ -1432,86 +1776,96 @@
                 h: s.kind === "laser" ? 5 : 46, v: s.v, kind: s.kind,
                 color: s.color, skinIndex: s.skinIndex,
                 life: s.life, damage: s.damage,
-                owner: s.owner, face: s.face === -1 ? -1 : 1, age: 0,
+                owner: typeof s.owner === "string" ? s.owner : "host",
+                face: s.face === -1 ? -1 : 1, age: 0,
                 maxLife: s.kind === "sword" ? 18 : s.life,
               }));
             }
-            const localHp = peerRole === "guest" ? pvpState.guestHp : pvpState.hostHp;
-            hpEl.textContent = String(localHp);
+            const localState = pvpState.players[localPlayerId];
+            if (localState) {
+              hp = localState.hp;
+              hpEl.textContent = String(localState.hp);
+            }
           }
           if (data.mode === "dead") mode = "dead";
           if (data.boss && boss) {
+            if (Number.isFinite(data.boss.x)) boss.x = data.boss.x;
+            if (Number.isFinite(data.boss.y)) boss.y = data.boss.y;
             if (Number.isFinite(data.boss.hp)) boss.hp = Math.max(0, data.boss.hp);
             if (typeof data.boss.alive === "boolean") boss.alive = data.boss.alive;
+            if (Number.isFinite(data.boss.dashTimer)) boss.dashTimer = data.boss.dashTimer;
+            if (Number.isFinite(data.boss.cooldown)) boss.cooldown = data.boss.cooldown;
+            if (Number.isFinite(data.boss.dashDirection)) boss.dashDirection = data.boss.dashDirection;
+            if (Number.isFinite(data.boss.pulseTimer)) boss.pulseTimer = data.boss.pulseTimer;
           }
           if (data.mode === "won") mode = "won";
         }
-        function handlePeerData(data) {
+        function handlePeerData(data, connection) {
           if (!data || typeof data !== "object") return;
           if (data.type === "session" && peerRole === "guest") {
             if (data.gameMode === "coop" || data.gameMode === "pvp") {
               multiplayerMode = data.gameMode;
-              multiplayerModeSelect.value = multiplayerMode;
-              setOnlineStatus(
-                multiplayerMode === "pvp"
-                  ? "اختار المضيف قتال PVP. انتظر بدء المباراة."
-                  : "اختار المضيف اللعب التعاوني."
-              );
+              localPlayerId = typeof data.playerId === "string" ? data.playerId : "guest1";
+              roomPlayerLimit = Number.isInteger(data.playerCount)
+                ? Math.max(2, Math.min(5, data.playerCount))
+                : roomPlayerLimit;
+              roomConnectedCount = Number.isInteger(data.connectedCount)
+                ? Math.max(1, Math.min(roomPlayerLimit, data.connectedCount))
+                : 2;
+              updateRoomStartButton();
+              setOnlineStatus(roomPlayerStatus() + " — انتظر المضيف.");
+            }
+          } else if (data.type === "count" && peerRole === "guest") {
+            if (Number.isInteger(data.connectedCount))
+              roomConnectedCount = Math.max(1, Math.min(roomPlayerLimit, data.connectedCount));
+            updateRoomStartButton();
+            setOnlineStatus(roomPlayerStatus());
+          } else if (data.type === "start" && peerRole === "guest") {
+            if (data.gameMode === "coop" || data.gameMode === "pvp") {
+              multiplayerMode = data.gameMode;
+              hideMenu();
+              if (multiplayerMode === "pvp")
+                startPvpMatch(data.arenaIndex, data.pvpPlayers && Object.keys(data.pvpPlayers));
+              else {
+                worldLayoutReady = true;
+                begin();
+              }
+              if (data.players) {
+                const localState = data.players[localPlayerId];
+                if (localState && player) {
+                  player.x = localState.x;
+                  player.y = localState.y;
+                }
+                applyNetworkPlayers(data.players);
+              }
+              if (data.pvpPlayers && pvpState)
+                pvpState.players = data.pvpPlayers;
             }
           } else if (data.type === "shield" && peerRole === "host" && mode === "pvp" && pvpState) {
-            if (pvpState.guestShield.cooldown === 0) {
-              pvpState.guestShield.timer = 180;
-              pvpState.guestShield.cooldown = 420;
-              pvpState.guestShield.hits = 1;
+            const state = connection && pvpState.players[connection.playerId];
+            if (state && state.shield.cooldown === 0) {
+              state.shield.timer = 180;
+              state.shield.cooldown = 420;
+              state.shield.hits = 1;
             }
           } else if (data.type === "pvpRestart" && peerRole === "host" && pvpState && pvpState.winner) {
             startPvpMatch();
+            sendPeerData({
+              type: "pvpReset",
+              arenaIndex: pvpArenaIndex,
+              pvpPlayers: pvpState.players,
+            });
+          } else if (data.type === "pvpReset" && peerRole === "guest") {
+            startPvpMatch(data.arenaIndex, data.pvpPlayers && Object.keys(data.pvpPlayers));
+            if (data.pvpPlayers && pvpState) pvpState.players = data.pvpPlayers;
           } else if (data.type === "player" && data.player) {
-            const p = data.player;
-            if (!Number.isFinite(p.x) || !Number.isFinite(p.y)) return;
-            const targetX = Math.max(0, Math.min(W - 34, p.x));
-            const targetY = Math.max(0, Math.min(H, p.y));
-            if (!remotePlayer) {
-              remotePlayer = { x: targetX, y: targetY, w: 34, h: 52 };
-            }
-            remotePlayer.targetX = targetX;
-            remotePlayer.targetY = targetY;
-            remotePlayer.face = p.face === -1 ? -1 : 1;
-            remotePlayer.skin = Number.isInteger(p.skin) ? Math.max(0, Math.min(4, p.skin)) : 4;
-            remotePlayer.weapon = p.weapon === "sword" ? "sword" : "laser";
-            remotePlayer.laserSkinIndex =
-              Number.isInteger(p.laserSkinIndex) &&
-              p.laserSkinIndex >= 0 &&
-              p.laserSkinIndex < laserSkins.length
-                ? p.laserSkinIndex
-                : 0;
-            remotePlayer.planet = Number.isInteger(p.planet) ? p.planet : 1;
-            remotePlayer.shieldTimer = Number.isFinite(p.shieldTimer) ? p.shieldTimer : 0;
-            remotePlayer.shieldHits = Number.isFinite(p.shieldHits) ? p.shieldHits : 0;
-          } else if (data.type === "shot" && data.shot) {
-            const s = data.shot;
-            if (
-              Number.isFinite(s.x) && Number.isFinite(s.y) &&
-              Number.isFinite(s.v) && (s.kind === "laser" || s.kind === "sword")
-            ) {
-              const skinIndex =
-                Number.isInteger(s.skinIndex) &&
-                s.skinIndex >= 0 &&
-                s.skinIndex < laserSkins.length
-                  ? s.skinIndex
-                  : 0;
-              shots.push({
-                x: s.x, y: s.y, w: s.kind === "laser" ? 22 : 48,
-                h: s.kind === "laser" ? 5 : 46, v: s.v, kind: s.kind,
-                color: s.kind === "laser" ? laserSkins[skinIndex].color : "#ffdf85",
-                skinIndex,
-                life: s.kind === "laser" ? 80 : 18,
-                damage: s.kind === "laser" ? 1 : 2,
-                owner: s.owner === "guest" ? "guest" : "host",
-                face: s.face === -1 ? -1 : 1, age: 0,
-                maxLife: s.kind === "sword" ? 18 : s.kind === "laser" ? 80 : 18,
-              });
-            }
+            if (peerRole === "host" && connection)
+              updateRemotePlayer(connection.playerId, data.player);
+          } else if (
+            data.type === "muzzle" && peerRole === "guest" &&
+            Number.isFinite(data.x) && Number.isFinite(data.y)
+          ) {
+            addMuzzleFlash(data.x, data.y, data.face);
           } else if (
             data.type === "pickup" && peerRole === "host" &&
             Number.isInteger(data.index) && pickups[data.index] && !pickups[data.index].taken
@@ -1524,81 +1878,141 @@
           }
         }
         function bindPeerConnection(connection, role) {
-          peerConnection = connection;
-          peerRole = role;
+          const ownerPeer = peer;
+          if (role === "guest") {
+            peerConnection = connection;
+            peerRole = role;
+            localPlayerId = peer && peer.id ? peer.id : "guest1";
+          }
           let connectionOpened = false;
           const connectionTimeout = window.setTimeout(() => {
-            if (connectionOpened || peerConnection !== connection) return;
+            if (connectionOpened) return;
             setOnlineStatus("انتهت مهلة الاتصال بالغرفة. تحقق من الرمز والإنترنت وحاول مجددًا.");
             connection.close();
           }, 15000);
           connection.on("open", () => {
-            if (peerConnection !== connection) return;
+            if (peer !== ownerPeer) return;
             connectionOpened = true;
             window.clearTimeout(connectionTimeout);
-            const remoteX = role === "host" ? W - 90 : 65;
-            remotePlayer = {
-              x: remoteX, y: 420, targetX: remoteX, targetY: 420,
-            w: 34, h: 52, face: role === "host" ? -1 : 1, skin: 4,
-            laserSkinIndex: 0, planet: 1,
-            };
-            multiplayerModeSelect.disabled = role === "guest";
-            copyRoomLink.hidden = role !== "host";
-            if (role === "host") sendOnlineSession();
-            setOnlineStatus(
-              role === "host"
-                ? "اتصل صديقك! يمكنك تغيير النمط قبل بدء اللعبة."
-                : "اتصلت بالغرفة؛ نمط اللعب يحدده المضيف."
-            );
+            if (role === "host") {
+              pendingConnections.delete(connection);
+              if (connectedPlayerCount() >= roomPlayerLimit) {
+                connection.close();
+                return;
+              }
+              const playerId = "guest" + nextGuestNumber++;
+              connection.playerId = playerId;
+              peerConnections.set(playerId, connection);
+              updateRemotePlayer(playerId, { x: W / 2, y: 420, skin: 4, planet: 1 });
+              connection.send({
+                type: "session",
+                gameMode: multiplayerMode,
+                playerId,
+                playerCount: roomPlayerLimit,
+                connectedCount: connectedPlayerCount(),
+              });
+              setOnlineStatus(roomPlayerStatus() + " — أرسل الرمز لبقية اللاعبين.");
+              sendPeerData({ type: "count", connectedCount: connectedPlayerCount() });
+              updateRoomStartButton();
+            } else {
+              peerConnections.set("host", connection);
+              updateRemotePlayer("host", { x: W / 2, y: 420, skin: 4, planet: 1 });
+              updateRoomStartButton();
+              setOnlineStatus("اتصلت بالغرفة؛ " + roomPlayerStatus());
+            }
           });
-          connection.on("data", handlePeerData);
+          connection.on("data", (data) => {
+            if (peer === ownerPeer) handlePeerData(data, connection);
+          });
           connection.on("close", () => {
-            if (peerConnection !== connection) return;
             window.clearTimeout(connectionTimeout);
-            peerConnection = null;
-            remotePlayer = null;
-            multiplayerModeSelect.disabled = false;
-            copyRoomLink.hidden = true;
-            setOnlineStatus("انقطع اتصال الصديق.");
+            if (peer !== ownerPeer) return;
+            if (role === "host") {
+              pendingConnections.delete(connection);
+              const playerId = connection.playerId;
+              peerConnections.delete(playerId);
+              remotePlayers.delete(playerId);
+              if (pvpState && pvpState.players[playerId]) {
+                pvpState.players[playerId].alive = false;
+                const survivors = Object.entries(pvpState.players).filter(([, state]) => state.alive);
+                if (survivors.length === 1) pvpState.winner = survivors[0][0];
+              }
+              remotePlayer = remotePlayers.values().next().value || null;
+              sendPeerData({ type: "count", connectedCount: connectedPlayerCount() });
+              updateRoomStartButton();
+              setOnlineStatus(roomPlayerStatus() + " — انقطع اتصال لاعب.");
+            } else if (peerConnection === connection) {
+              peerConnection = null;
+              peerConnections.clear();
+              remotePlayers.clear();
+              remotePlayer = null;
+              document.getElementById("startOnlineMatch").disabled = true;
+              copyRoomLink.hidden = true;
+              setOnlineStatus("انقطع اتصال المضيف.");
+            }
           });
           connection.on("error", () => {
-            if (peerConnection !== connection) return;
             window.clearTimeout(connectionTimeout);
             setOnlineStatus("تعذّر الاتصال بالغرفة. تحقق من الرمز والإنترنت وحاول مجددًا.");
           });
         }
-        function createOnlineRoom() {
+        async function createOnlineRoom() {
           if (!window.Peer) {
             setOnlineStatus("تعذّر تحميل الاتصال؛ تحقق من الإنترنت وأعد فتح اللعبة.");
             return;
           }
+          const createButton = document.getElementById("createRoom");
           resetPeerSession();
+          createButton.disabled = true;
+          roomPlayerLimit = Number(playerCountSelect.value);
           const code = String(Math.floor(100000 + Math.random() * 900000));
           const roomId = "kernel-" + code;
           peerRole = "host";
           copyRoomLink.hidden = true;
           currentRoomCode = code;
-          const client = new window.Peer(roomId);
+          roomCodeDisplay.textContent = code;
+          roomCodeDisplay.hidden = false;
+          onlinePanel.hidden = false;
+          let client;
+          let transport;
+          try {
+            ({ client, transport } = await createPeerClient(roomId));
+          } catch (error) {
+            createButton.disabled = false;
+            peerRole = "";
+            setOnlineStatus("تعذّر بدء خادم اللعب: " + error.message);
+            return;
+          }
+          if (peerRole !== "host") {
+            client.destroy();
+            createButton.disabled = false;
+            return;
+          }
           peer = client;
           const serverTimeout = window.setTimeout(() => {
             if (peer !== client || client.open) return;
-            setOnlineStatus("تعذّر الاتصال بخادم اللعب التلقائي. تحقق من الإنترنت وحاول مجددًا.");
+            setOnlineStatus("تعذّر الاتصال بـ" + transport + ". تحقق من الإنترنت وحاول مجددًا.");
             peerRole = "";
+            createButton.disabled = false;
             client.destroy();
           }, 15000);
-          setOnlineStatus("جارٍ إنشاء الغرفة...");
+          setOnlineStatus("جارٍ الاتصال بـ" + transport + " وإنشاء الغرفة...");
           client.on("open", () => {
             window.clearTimeout(serverTimeout);
             if (peer !== client) return;
             copyRoomLink.hidden = false;
-            setOnlineStatus("رمز غرفتك: " + code + " — أرسله لصديقك.");
+            createButton.disabled = false;
+            playerCountSelect.disabled = true;
+            updateRoomStartButton();
+            setOnlineStatus("تم إنشاء الغرفة. أرسل الرمز إلى " + (roomPlayerLimit - 1) + " لاعبين.");
           });
           client.on("connection", (connection) => {
-            if (peerConnection && peerConnection.open) {
+            if (connectedPlayerCount() + pendingConnections.size >= roomPlayerLimit) {
               connection.close();
-              setOnlineStatus("الغرفة مكتملة؛ لا يمكن ضم لاعب ثالث.");
+              setOnlineStatus("الغرفة مكتملة؛ لا يمكن ضم لاعبين إضافيين.");
               return;
             }
+            pendingConnections.add(connection);
             bindPeerConnection(connection, "host");
           });
           client.on("error", (error) => {
@@ -1610,9 +2024,11 @@
                 : "تعذّر الاتصال بخادم اللعب التلقائي. تحقق من الإنترنت وحاول مجددًا."
             );
             peerRole = "";
+            createButton.disabled = false;
+            playerCountSelect.disabled = false;
           });
         }
-        function joinOnlineRoom() {
+        async function joinOnlineRoom() {
           const code = document.getElementById("roomCode").value.replace(/\D/g, "").slice(0, 6);
           if (!window.Peer) {
             setOnlineStatus("تعذّر تحميل الاتصال؛ تحقق من الإنترنت وأعد فتح اللعبة.");
@@ -1622,22 +2038,41 @@
             setOnlineStatus("أدخل رمز الغرفة المكوّن من 6 أرقام.");
             return;
           }
+          const joinButton = document.getElementById("joinRoom");
           resetPeerSession();
+          joinButton.disabled = true;
           peerRole = "guest";
           worldLayoutReady = false;
           copyRoomLink.hidden = true;
-          const client = new window.Peer();
+          let client;
+          let transport;
+          try {
+            ({ client, transport } = await createPeerClient());
+          } catch (error) {
+            joinButton.disabled = false;
+            peerRole = "";
+            setOnlineStatus("تعذّر بدء الاتصال: " + error.message);
+            return;
+          }
+          if (peerRole !== "guest") {
+            client.destroy();
+            joinButton.disabled = false;
+            return;
+          }
           peer = client;
           const serverTimeout = window.setTimeout(() => {
             if (peer !== client || client.open) return;
-            setOnlineStatus("تعذّر الاتصال بخادم اللعب التلقائي. تحقق من الإنترنت وحاول مجددًا.");
+            setOnlineStatus("تعذّر الاتصال بـ" + transport + ". تحقق من الإنترنت وحاول مجددًا.");
             peerRole = "";
+            joinButton.disabled = false;
             client.destroy();
           }, 15000);
-          setOnlineStatus("جارٍ الاتصال بخادم اللعب...");
+          setOnlineStatus("جارٍ الاتصال بـ" + transport + "...");
           client.on("open", () => {
             window.clearTimeout(serverTimeout);
             if (peer !== client) return;
+            localPlayerId = client.id;
+            joinButton.disabled = false;
             const connection = client.connect("kernel-" + code, { reliable: true });
             bindPeerConnection(connection, "guest");
           });
@@ -1646,9 +2081,10 @@
             if (peer !== client) return;
             setOnlineStatus("تعذّر العثور على الغرفة أو الاتصال بخادم اللعب. تحقق من الرمز والإنترنت.");
             peerRole = "";
+            joinButton.disabled = false;
           });
         }
-        function startPvpMatch() {
+        function startPvpMatch(arenaIndex, playerIds) {
           planet = 1;
           atoms = 0;
           hp = 5;
@@ -1660,52 +2096,83 @@
           enemies = [];
           hazards = [];
           shots = [];
+          pvpArenaIndex =
+            Number.isInteger(arenaIndex) && arenaIndex >= 0 && arenaIndex < pvpArenas.length
+              ? arenaIndex
+              : Math.floor(Math.random() * pvpArenas.length);
+          const arena = pvpArenas[pvpArenaIndex];
           platforms.forEach((p, index) => {
-            const arena = [
-              [0, 485, 960, 55],
-              [150, 385, 155, 18],
-              [405, 320, 150, 18],
-              [655, 385, 155, 18],
-            ][index];
-            p.x = arena[0];
-            p.baseX = arena[0];
-            p.y = arena[1];
-            p.w = arena[2];
-            p.h = arena[3];
+            const platform = arena.platforms[index];
+            p.x = platform[0];
+            p.baseX = platform[0];
+            p.y = platform[1];
+            p.w = platform[2];
+            p.h = platform[3];
             p.moving = false;
             p.crumbling = false;
             p.broken = false;
           });
+          const participantOrder = [
+            ...new Set(
+              Array.isArray(playerIds)
+                ? playerIds.filter((id) => typeof id === "string" && id)
+                : ["host", localPlayerId, ...remotePlayers.keys()],
+            ),
+          ];
+          if (!participantOrder.includes(localPlayerId)) participantOrder.push(localPlayerId);
           pvpState = {
-            hostScore: 0,
-            guestScore: 0,
-            hostHp: 5,
-            guestHp: 5,
+            players: Object.fromEntries(
+              participantOrder.map((id, index) => [
+                id,
+                {
+                  hp: 5,
+                  invulnerable: 0,
+                  shield: { timer: 0, cooldown: 0, hits: 0 },
+                  alive: true,
+                  spawnX: Math.round(
+                    55 + (index * (W - 145)) / Math.max(1, participantOrder.length - 1),
+                  ),
+                  spawnY: 433,
+                },
+              ]),
+            ),
             winner: "",
-            hostInvulnerable: 0,
-            guestInvulnerable: 0,
-            hostShield: { timer: 0, cooldown: 0, hits: 0 },
-            guestShield: { timer: 0, cooldown: 0, hits: 0 },
+            arenaIndex: pvpArenaIndex,
           };
-          player.x = peerRole === "guest" ? W - 95 : 65;
+          const spawnX = (index) =>
+            55 + (index * (W - 145)) / Math.max(1, participantOrder.length - 1);
+          player.x = spawnX(Math.max(0, participantOrder.indexOf(localPlayerId)));
           player.y = 433;
           player.vx = 0;
           player.vy = 0;
           player.ground = true;
-          player.face = peerRole === "guest" ? -1 : 1;
-          if (remotePlayer) {
-            remotePlayer.x = peerRole === "guest" ? 65 : W - 95;
-            remotePlayer.y = 433;
-            remotePlayer.targetX = remotePlayer.x;
-            remotePlayer.targetY = remotePlayer.y;
-            remotePlayer.planet = 1;
-          }
+          player.face = localPlayerId === "host" ? 1 : -1;
+          remotePlayers.forEach((remote, id) => {
+            const index = participantOrder.indexOf(id);
+            if (index < 0) return;
+            remote.x = spawnX(index);
+            remote.y = 433;
+            remote.targetX = remote.x;
+            remote.targetY = remote.y;
+            remote.planet = 1;
+          });
+          remotePlayer = remotePlayers.values().next().value || null;
           mode = "pvp";
-          say("حلبة PVP! أول لاعب يصل إلى 5 نقاط يفوز.", 220);
+          challengeLabel.textContent = arena.name + " — آخر لاعب يبقى حيًا يفوز.";
+          updateCamera(true);
+          startMusic();
+          say("حلبة القتال! آخر لاعب يبقى حيًا يفوز.", 90);
         }
         function requestPvpRematch() {
           if (!pvpState || !pvpState.winner) return;
-          if (peerRole === "host") startPvpMatch();
+          if (peerRole === "host") {
+            startPvpMatch();
+            sendPeerData({
+              type: "pvpReset",
+              arenaIndex: pvpArenaIndex,
+              pvpPlayers: pvpState.players,
+            });
+          }
           else if (peerRole === "guest") sendPeerData({ type: "pvpRestart" });
         }
         function begin() {
@@ -1715,11 +2182,11 @@
             return;
           }
           if (multiplayerMode === "pvp") {
-            if (peerRole !== "host" || !peerConnection || !peerConnection.open) {
+            if (peerRole !== "host" || connectedPlayerCount() !== roomPlayerLimit) {
               say(
                 peerRole === "guest"
                   ? "انتظر المضيف لبدء مباراة PVP."
-                  : "أنشئ غرفة واتصل بصديق قبل بدء PVP."
+                  : "انتظر اكتمال عدد اللاعبين قبل بدء القتال."
               );
               return;
             }
@@ -1741,7 +2208,7 @@
             planet === 8
               ? "وصلت إلى الكوكب المجهول... اهزم الزعيم وخذ النواة."
               : "انقطعت إشارة الأرض! اجمع 10 ذرات من " + names[planet - 1] + ".",
-            190,
+            90,
           );
         }
         function rect(x, y, w, h, col) {
@@ -1919,15 +2386,16 @@
           rect(0, 465, W, 5, theme.accent);
         }
         function drawPvpArenaBackground() {
+          const colors = pvpArenas[pvpArenaIndex].colors;
           const sky = ctx.createLinearGradient(0, 0, 0, H);
-          sky.addColorStop(0, "#11152e");
-          sky.addColorStop(0.65, "#25203a");
+          sky.addColorStop(0, colors[0]);
+          sky.addColorStop(0.65, colors[1]);
           sky.addColorStop(1, "#080d19");
           ctx.fillStyle = sky;
           ctx.fillRect(0, 0, W, H);
-          ctx.fillStyle = "#171b32";
+          ctx.fillStyle = colors[1];
           ctx.fillRect(45, 80, 870, 365);
-          ctx.strokeStyle = "#8274b566";
+          ctx.strokeStyle = colors[3] + "66";
           ctx.lineWidth = 3;
           for (let x = 70; x < W; x += 70) {
             ctx.beginPath();
@@ -1935,7 +2403,7 @@
             ctx.lineTo(x, 440);
             ctx.stroke();
           }
-          ctx.fillStyle = "#e9c873";
+          ctx.fillStyle = colors[3];
           for (let x = 110; x < W; x += 185) {
             ctx.save();
             ctx.globalAlpha = 0.7;
@@ -1947,11 +2415,11 @@
             ctx.restore();
           }
           const floor = ctx.createLinearGradient(0, 450, 0, H);
-          floor.addColorStop(0, "#475168");
-          floor.addColorStop(1, "#141a29");
+          floor.addColorStop(0, colors[2]);
+          floor.addColorStop(1, colors[0]);
           ctx.fillStyle = floor;
           ctx.fillRect(0, 450, W, 90);
-          ctx.strokeStyle = "#dfd18466";
+          ctx.strokeStyle = colors[3] + "66";
           ctx.lineWidth = 2;
           for (let x = -100; x < W + 100; x += 90) {
             ctx.beginPath();
@@ -1959,7 +2427,7 @@
             ctx.lineTo(x, H);
             ctx.stroke();
           }
-          ctx.fillStyle = "#ffca7555";
+          ctx.fillStyle = colors[3] + "55";
           ctx.fillRect(0, 448, W, 3);
         }
         function drawLaserShot(shot) {
@@ -1967,7 +2435,17 @@
             laserSkins[Number.isInteger(shot.skinIndex) ? shot.skinIndex : laserSkinIndex] ||
             laserSkins[0];
           ctx.save();
-          ctx.translate(shot.x, shot.y + shot.h / 2);
+          const direction = shot.v < 0 ? -1 : 1;
+          ctx.translate(shot.x + (direction < 0 ? shot.w : 0), shot.y + shot.h / 2);
+          ctx.scale(direction, 1);
+          ctx.strokeStyle = "#56dfffaa";
+          ctx.lineWidth = Math.max(2, shot.h * 0.65);
+          ctx.shadowColor = "#32cfff";
+          ctx.shadowBlur = 12;
+          ctx.beginPath();
+          ctx.moveTo(-18, 0);
+          ctx.lineTo(-2, 0);
+          ctx.stroke();
           ctx.shadowColor = shot.glow || skin.glow;
           ctx.shadowBlur = 15;
           ctx.fillStyle = shot.color || skin.color;
@@ -2007,6 +2485,31 @@
           ctx.fillStyle = "#ffffff";
           ctx.fillRect(shot.w * 0.22, -1, shot.w * 0.58, 2);
           ctx.restore();
+        }
+        function addMuzzleFlash(x, y, face) {
+          muzzleFlashes.push({ x, y, face: face === -1 ? -1 : 1, life: 8, maxLife: 8 });
+          emitParticles(x, y, 7, "#55ddff");
+        }
+        function drawMuzzleFlashes() {
+          muzzleFlashes.forEach((flash) => {
+            const progress = flash.life / flash.maxLife;
+            const radius = 4 + (1 - progress) * 9;
+            ctx.save();
+            ctx.globalAlpha = progress;
+            ctx.shadowColor = "#42dfff";
+            ctx.shadowBlur = 18;
+            ctx.fillStyle = "#b8f7ff";
+            ctx.beginPath();
+            ctx.ellipse(flash.x, flash.y, radius, radius * 0.58, 0, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = "#50dfff";
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(flash.x - flash.face * radius * 1.8, flash.y);
+            ctx.lineTo(flash.x + flash.face * radius * 1.8, flash.y);
+            ctx.stroke();
+            ctx.restore();
+          });
         }
         function drawSwordSlash(shot) {
           const face = shot.face === -1 ? -1 : 1;
@@ -3496,6 +3999,7 @@
               (Math.random() - 0.5) * cameraShake,
             );
           }
+            ctx.translate(-cameraX, -cameraY);
           if (mode === "pvp") drawPvpArenaBackground();
           else background();
           platforms.forEach((p) => {
@@ -3580,12 +4084,6 @@
             ctx.arc(boss.x + 76, boss.y + 36, 2.5, 0, Math.PI * 2);
             ctx.fill();
             ctx.restore();
-            rect(300, 40, 360, 12, "#442b58");
-            rect(300, 40, (360 * boss.hp) / boss.max, 12, "#ff4d78");
-            ctx.fillStyle = "#fff";
-            ctx.font = "bold 18px Tahoma";
-            ctx.textAlign = "center";
-            ctx.fillText("ملك الثقب", 480, 30);
           }
           if (bossCore) {
             drawNucleus(
@@ -3609,67 +4107,83 @@
             ctx.shadowBlur = 0;
             ctx.globalAlpha = 1;
           });
-          if (player && (mode === "play" || mode === "boss" || mode === "pvp")) {
+          drawMuzzleFlashes();
+          const localPlayerAlive =
+            mode !== "pvp" || !pvpState || !pvpState.players[localPlayerId] ||
+            pvpState.players[localPlayerId].alive;
+          if (player && localPlayerAlive && (mode === "play" || mode === "boss" || mode === "pvp")) {
             if (player.inv % 8 < 4 || player.inv === 0) astronaut();
             if (player.shieldTimer > 0 && player.shieldHits > 0)
               drawShieldBubble(player);
             const localHp =
               mode === "pvp" && pvpState
-                ? peerRole === "guest"
-                  ? pvpState.guestHp
-                  : pvpState.hostHp
+                ? (pvpState.players[localPlayerId] || { hp: hp }).hp
                 : hp;
             drawPlayerHeartCount(player, localHp);
-            drawRemoteAstronaut();
           }
-          ctx.textAlign = "left";
-          ctx.font = "bold 16px Tahoma";
+          if (mode === "pvp" || localPlayerAlive) drawRemoteAstronaut();
+          ctx.restore();
+          ctx.save();
+          const screenCenterX = viewportWidth / 2;
+          const compact = viewportWidth < 500;
+          ctx.textAlign = "right";
+          ctx.font = "bold " + (compact ? 11 : 14) + "px Tahoma";
           ctx.fillStyle = "#eaf8ff";
           ctx.fillText(
-            mode === "pvp" ? "الحلبة: PVP" : "الكوكب: " + names[planet - 1],
-            18,
-            28,
+            mode === "pvp" ? pvpArenas[pvpArenaIndex].name : "الكوكب: " + names[planet - 1],
+            viewportWidth - 10,
+            58,
+            Math.max(120, viewportWidth * 0.42),
           );
           ctx.fillText(
             "السلاح: " + (weapon === "laser" ? "ليزر" : "سيف"),
-            18,
-            52,
+            viewportWidth - 10,
+            77,
+            Math.max(110, viewportWidth * 0.4),
           );
+          if (boss && boss.alive) {
+            const bossBarWidth = Math.min(360, viewportWidth - 32);
+            const bossBarX = (viewportWidth - bossBarWidth) / 2;
+            ctx.textAlign = "center";
+            ctx.font = "bold 14px Tahoma";
+            ctx.fillStyle = "#fff";
+            ctx.fillText("ملك الثقب", screenCenterX, 94);
+            rect(bossBarX, 101, bossBarWidth, 10, "#442b58");
+            rect(bossBarX, 101, (bossBarWidth * boss.hp) / boss.max, 10, "#ff4d78");
+          }
           if (mode === "pvp" && pvpState) {
             ctx.textAlign = "center";
             ctx.fillStyle = "#fff2c2";
-            ctx.font = "bold 20px Tahoma";
-            ctx.fillText(
-              "المضيف " + pvpState.hostScore + "  -  " + pvpState.guestScore + " الصديق",
-              480,
-              33,
-            );
-            ctx.font = "bold 15px Tahoma";
+            ctx.font = "bold " + (compact ? 12 : 16) + "px Tahoma";
             ctx.fillStyle = "#dbeaff";
             ctx.fillText(
-              "قلوبك " + (peerRole === "guest" ? pvpState.guestHp : pvpState.hostHp) +
-                "  •  أول من يصل إلى 5 نقاط يفوز",
-              480,
-              57,
+              "قتال • قلوبك " + ((pvpState.players[localPlayerId] || { hp: hp }).hp),
+              screenCenterX,
+              Math.max(92, viewportHeight * 0.18),
             );
             if (pvpState.winner) {
+              const panelWidth = Math.min(480, viewportWidth - 24);
+              const panelHeight = 88;
+              const panelY = Math.max(40, (viewportHeight - panelHeight) / 2);
               ctx.fillStyle = "#07152be8";
-              ctx.fillRect(240, 205, 480, 105);
+              ctx.fillRect((viewportWidth - panelWidth) / 2, panelY, panelWidth, panelHeight);
               ctx.fillStyle = "#ffe5a6";
-              ctx.font = "bold 29px Tahoma";
+              ctx.font = "bold " + Math.min(26, Math.max(15, viewportWidth * 0.055)) + "px Tahoma";
               ctx.fillText(
-                (pvpState.winner === peerRole ? "فزت بالمباراة!" : "فاز صديقك!") +
-                  " اضغط Enter لإعادة اللعب",
-                480,
-                260,
+                pvpState.winner === localPlayerId ? "فزت بالمباراة!" : "فاز لاعب آخر!",
+                screenCenterX,
+                panelY + 36,
+                panelWidth - 20,
               );
+              ctx.font = "14px Tahoma";
+              ctx.fillText("اضغط Enter لإعادة اللعب", screenCenterX, panelY + 64);
             }
           }
           if (msgTimer > 0) {
             ctx.save();
-            const maxWidth = W - 80;
-            const fontSize = 30;
-            const lineHeight = 42;
+            const maxWidth = Math.max(150, viewportWidth - 24);
+            const fontSize = Math.min(30, Math.max(16, viewportWidth * 0.04));
+            const lineHeight = fontSize * 1.4;
             ctx.font = "bold " + fontSize + "px Tahoma";
             const lines = [];
             let line = "";
@@ -3685,13 +4199,13 @@
             if (line) lines.push(line);
             const panelWidth = Math.min(
               maxWidth,
-              Math.max(300, ...lines.map((text) => ctx.measureText(text).width + 48)),
+              Math.max(Math.min(180, maxWidth), ...lines.map((text) => ctx.measureText(text).width + 32)),
             );
-            const panelHeight = lines.length * lineHeight + 24;
-            const panelY = Math.round((H - panelHeight) / 2);
+            const panelHeight = lines.length * lineHeight + 20;
+            const panelY = Math.round((viewportHeight - panelHeight) / 2);
             ctx.fillStyle = "#07152be8";
             ctx.fillRect(
-              (W - panelWidth) / 2,
+              (viewportWidth - panelWidth) / 2,
               panelY,
               panelWidth,
               panelHeight,
@@ -3702,7 +4216,7 @@
             lines.forEach((text, index) => {
               ctx.fillText(
                 text,
-                W / 2,
+                screenCenterX,
                 panelY + 12 + lineHeight * (index + 0.5),
                 maxWidth,
               );
@@ -3718,14 +4232,14 @@
           ) {
             if (mode !== "intro") {
               ctx.fillStyle = "#030817d9";
-              ctx.fillRect(0, 0, W, H);
+              ctx.fillRect(0, 0, viewportWidth, viewportHeight);
             }
             ctx.textAlign = "center";
             ctx.fillStyle = "#75eaff";
-            ctx.font = "bold 42px Tahoma";
-            ctx.fillText("KERNEL", 480, mode === "intro" ? 70 : 190);
+            ctx.font = "bold " + Math.min(42, Math.max(24, viewportWidth * 0.09)) + "px Tahoma";
+            ctx.fillText("KERNEL", screenCenterX, viewportHeight * 0.35);
             ctx.fillStyle = "#fff";
-            ctx.font = "bold 23px Tahoma";
+            ctx.font = "bold " + Math.min(23, Math.max(14, viewportWidth * 0.05)) + "px Tahoma";
             let title =
               mode === "intro"
                 ? "مغامرة بين الكواكب"
@@ -3734,8 +4248,8 @@
                   : mode === "ending" || mode === "won"
                     ? "انتصرت على ملك الثقب!"
                     : "انتهت المحاولة";
-            ctx.fillText(title, 480, mode === "intro" ? 104 : 245);
-            ctx.font = "18px Tahoma";
+            ctx.fillText(title, screenCenterX, viewportHeight * 0.45, viewportWidth - 24);
+            ctx.font = Math.min(18, Math.max(12, viewportWidth * 0.04)) + "px Tahoma";
             let sub =
               mode === "intro"
                 ? "اضغط Enter أو المس الشاشة للبدء"
@@ -3746,16 +4260,16 @@
                       ? "أسقط الزعيم النواة، فعادت الذرات لتمنح المجرة الحياة..."
                       : "نجت الكواكب السبعة، وأصبحت بطل المجرة!"
                     : "اضغط Enter لإعادة المحاولة";
-            ctx.fillText(sub, 480, mode === "intro" ? 495 : 290);
+            ctx.fillText(sub, screenCenterX, viewportHeight * 0.85, viewportWidth - 24);
             if (mode === "travel") drawTravelAnimation();
             if (mode === "ending" || mode === "won") {
               drawFinalCinematic(Math.min(1, endingFrame / 210));
               ctx.fillStyle = "#ffe5a6";
               ctx.font = "bold 17px Tahoma";
-              ctx.fillText("انتهت الرحلة", 480, 480);
+              ctx.fillText("انتهت الرحلة", screenCenterX, viewportHeight - 52);
               ctx.fillStyle = "#75eaff";
               ctx.font = "bold 18px Tahoma";
-              ctx.fillText("البطل: " + atoms + " ذرة + نواة الطاقة", 480, 504);
+              ctx.fillText("البطل: " + atoms + " ذرة + نواة الطاقة", screenCenterX, viewportHeight - 28);
             }
           }
           if (mode === "intro") drawIntroAnimation();
@@ -3764,6 +4278,11 @@
         function attack(kind) {
           if (gameInputBlocked()) return;
           if (mode !== "play" && mode !== "boss" && mode !== "pvp") return;
+          if (peerRole === "guest") return;
+          if (
+            mode === "pvp" && pvpState &&
+            pvpState.players[localPlayerId] && !pvpState.players[localPlayerId].alive
+          ) return;
           if (player.cool > 0) return;
           const s = {
             x:
@@ -3778,7 +4297,7 @@
             color: kind === "laser" ? laserSkins[laserSkinIndex].color : "#ffdf85",
             life: kind === "laser" ? 80 : 18,
             damage: kind === "laser" ? 1 : 2,
-            owner: peerRole === "guest" ? "guest" : "host",
+            owner: localPlayerId,
             face: player.face,
             skinIndex: laserSkinIndex,
             age: 0,
@@ -3788,18 +4307,21 @@
           shots.push(s);
           player.shot = 7;
           emitParticles(s.x + (kind === "laser" ? 0 : 14), s.y + 3, 5, kind === "laser" ? "#8ffbff" : "#ffdf85");
-          sendPeerData({
-            type: "shot",
-            shot: {
-              x: s.x, y: s.y, v: s.v, kind: s.kind, color: s.color,
-              owner: s.owner, face: s.face, skinIndex: s.skinIndex,
-            },
-          });
+          const muzzleX = player.x + (player.face === 1 ? player.w + 2 : -2);
+          const muzzleY = player.y + 25;
+          addMuzzleFlash(muzzleX, muzzleY, player.face);
+          if (peerRole === "host")
+            sendPeerData({ type: "muzzle", x: muzzleX, y: muzzleY, face: player.face });
           player.cool = kind === "laser" ? 17 : 27;
         }
         function activateShield() {
           if (gameInputBlocked()) return;
           if (mode !== "play" && mode !== "boss" && mode !== "pvp") return;
+          if (peerRole === "guest") return;
+          if (
+            mode === "pvp" && pvpState &&
+            pvpState.players[localPlayerId] && !pvpState.players[localPlayerId].alive
+          ) return;
           if (player.shieldCooldown > 0) {
             say("الدرع يعاد شحنه، انتظر قليلًا.", 75);
             return;
@@ -3808,9 +4330,15 @@
           player.shieldCooldown = 420;
           player.shieldHits = 1;
           if (mode === "pvp" && pvpState) {
-            const role = peerRole === "guest" ? "guest" : "host";
-            pvpState[role + "Shield"] = { timer: 180, cooldown: 420, hits: 1 };
-            if (role === "guest") sendPeerData({ type: "shield" });
+            if (peerRole === "host" && pvpState.players[localPlayerId]) {
+              pvpState.players[localPlayerId].shield = {
+                timer: 180,
+                cooldown: 420,
+                hits: 1,
+              };
+            } else {
+              sendPeerData({ type: "shield" });
+            }
           }
           say("الدرع نشط — سيصد الضربة التالية!", 100);
         }
@@ -3841,15 +4369,15 @@
             s.y + s.h > e.y
           );
         }
-        function applyPvpDamage(role) {
+        function applyPvpDamage(playerId) {
           if (peerRole !== "host" || !pvpState || pvpState.winner) return;
-          const shield = pvpState[role + "Shield"];
-          if (role === "host" && pvpState.hostInvulnerable > 0) return;
-          if (role === "guest" && pvpState.guestInvulnerable > 0) return;
+          const targetState = pvpState.players[playerId];
+          if (!targetState || !targetState.alive || targetState.invulnerable > 0) return;
+          const shield = targetState.shield;
+          const target = playerId === "host" ? player : remotePlayers.get(playerId);
           if (shield.timer > 0 && shield.hits > 0) {
             shield.hits = 0;
             shield.timer = 0;
-            const target = role === "host" ? player : remotePlayer;
             if (target) {
               target.shieldTimer = 0;
               target.shieldHits = 0;
@@ -3857,99 +4385,105 @@
             }
             return;
           }
-          pvpState[role + "Hp"]--;
-          pvpState[role + "Invulnerable"] = 48;
-          const target = role === "host" ? player : remotePlayer;
+          targetState.hp = Math.max(0, targetState.hp - 1);
+          targetState.invulnerable = 48;
           if (target)
             emitParticles(target.x + target.w / 2, target.y + target.h / 2, 12, "#ff718d");
-          if (pvpState[role + "Hp"] > 0) return;
-          const scorer = role === "host" ? "guest" : "host";
-          pvpState[scorer + "Score"]++;
-          pvpState[role + "Hp"] = 5;
-          pvpState[role + "Shield"] = { timer: 0, cooldown: 0, hits: 0 };
-          pvpState[role + "Invulnerable"] = 70;
-          if (target) {
-            target.x = role === "host" ? 65 : W - 95;
-            target.y = 433;
-            target.vx = 0;
-            target.vy = 0;
-            target.targetX = target.x;
-            target.targetY = target.y;
+          if (targetState.hp > 0) return;
+          targetState.alive = false;
+          if (target) target.vx = target.vy = 0;
+          const survivors = Object.entries(pvpState.players).filter(([, state]) => state.alive);
+          if (survivors.length <= 1) {
+            pvpState.winner = survivors.length ? survivors[0][0] : "";
+            say(
+              pvpState.winner === localPlayerId
+                ? "فزت! أنت آخر لاعب بقي حيًا."
+                : "انتهى القتال؛ بقي لاعب واحد حيًا.",
+              180,
+            );
           }
-          if (pvpState[scorer + "Score"] >= 5) pvpState.winner = scorer;
-          say(
-            pvpState.winner
-              ? (scorer === "host" ? "فاز المضيف!" : "فاز الصديق!")
-              : (scorer === "host" ? "نقطة للمضيف!" : "نقطة للصديق!"),
-            100,
-          );
         }
         function updatePvp() {
-          if (!player || !pvpState) return;
-          if (player.cool > 0) player.cool--;
-          if (player.inv > 0) player.inv--;
-          const direction = (keys.right ? 1 : 0) - (keys.left ? 1 : 0);
-          player.vx = direction * 3.8;
-          if (player.vx) player.face = Math.sign(player.vx);
-          if (keys.jump && !player.jumpHeld && player.ground) {
-            player.vy = -11;
-            player.ground = false;
-            playSoundEffect("jump");
-          }
-          player.jumpHeld = keys.jump;
-          player.vy += 0.48;
-          player.x = Math.max(0, Math.min(W - player.w, player.x + player.vx));
-          player.y += player.vy;
-          player.ground = false;
-          platforms.forEach((p) => {
-            if (
-              player.x + player.w > p.x &&
-              player.x < p.x + p.w &&
-              player.y + player.h >= p.y &&
-              player.y + player.h - player.vy <= p.y &&
-              player.vy >= 0
-            ) {
-              player.y = p.y - player.h;
-              player.vy = 0;
-              player.ground = true;
+          if (!player || !pvpState || pvpState.winner) return;
+          const localState = pvpState.players[localPlayerId];
+          if (localState && localState.alive) {
+            if (player.cool > 0) player.cool--;
+            if (player.inv > 0) player.inv--;
+            const direction = (keys.right ? 1 : 0) - (keys.left ? 1 : 0);
+            player.vx = direction * 3.8;
+            if (player.vx) player.face = Math.sign(player.vx);
+            if (keys.jump && !player.jumpHeld && player.ground) {
+              player.vy = -11;
+              player.ground = false;
+              playSoundEffect("jump");
             }
-          });
-          if (player.y > H + 40) {
-            player.y = 433;
-            player.vy = 0;
+            player.jumpHeld = keys.jump;
+            player.vy += 0.48;
+            player.x = Math.max(0, Math.min(W - player.w, player.x + player.vx));
+            player.y += player.vy;
+            player.ground = false;
+            platforms.forEach((p) => {
+              if (
+                player.x + player.w > p.x &&
+                player.x < p.x + p.w &&
+                player.y + player.h >= p.y &&
+                player.y + player.h - player.vy <= p.y &&
+                player.vy >= 0
+              ) {
+                player.y = p.y - player.h;
+                player.vy = 0;
+                player.ground = true;
+              }
+            });
+            if (player.y > H - player.h - 20) {
+                player.x = Number.isFinite(localState.spawnX) ? localState.spawnX : player.x;
+                player.y = Number.isFinite(localState.spawnY) ? localState.spawnY : 433;
+                player.vy = 0;
+                player.ground = true;
+                localState.invulnerable = Math.max(localState.invulnerable, 45);
+              }
+          } else {
+            keys.left = keys.right = keys.jump = false;
+            player.vx = player.vy = 0;
           }
           if (peerRole === "host") {
-            if (pvpState.hostInvulnerable > 0) pvpState.hostInvulnerable--;
-            if (pvpState.guestInvulnerable > 0) pvpState.guestInvulnerable--;
-            ["hostShield", "guestShield"].forEach((key) => {
-              const shield = pvpState[key];
+            Object.values(pvpState.players).forEach((state) => {
+              if (state.invulnerable > 0) state.invulnerable--;
+              const shield = state.shield;
               if (shield.timer > 0) shield.timer--;
               if (shield.cooldown > 0) shield.cooldown--;
             });
-            if (remotePlayer && remotePlayer.y > H + 40) {
-              remotePlayer.y = 433;
-              remotePlayer.targetY = 433;
-              remotePlayer.vy = 0;
-            }
+            remotePlayers.forEach((remote, id) => {
+              const state = pvpState.players[id];
+              if (remote.targetY > H - remote.h - 20 && state && state.alive) {
+                remote.x = Number.isFinite(state.spawnX) ? state.spawnX : remote.x;
+                remote.targetX = remote.x;
+                remote.y = Number.isFinite(state.spawnY) ? state.spawnY : 433;
+                remote.targetY = remote.y;
+                remote.vy = 0;
+                state.invulnerable = Math.max(state.invulnerable, 45);
+              }
+            });
           }
           shots.forEach((s) => {
             s.x += s.v;
             s.life--;
             s.age = (s.age || 0) + 1;
             if (peerRole !== "host" || !s.life || pvpState.winner) return;
-            const targetRole = s.owner === "guest" ? "host" : "guest";
-            const target = targetRole === "host" ? player : remotePlayer;
-            if (target && hitTarget(s, target)) {
+            for (const [targetId, state] of Object.entries(pvpState.players)) {
+              if (targetId === s.owner || !state.alive) continue;
+              const target = targetId === "host" ? player : remotePlayers.get(targetId);
+              if (!target || !hitTarget(s, target)) continue;
               s.life = 0;
-              applyPvpDamage(targetRole);
+              applyPvpDamage(targetId);
+              break;
             }
           });
           shots = shots.filter((s) => s.life > 0 && s.x > -40 && s.x < W + 40);
-          if (peerRole === "host") {
-            hp = pvpState.hostHp;
-            hpEl.textContent = String(pvpState.hostHp);
-          } else {
-            hpEl.textContent = String(pvpState.guestHp);
+          const localHealthState = pvpState.players[localPlayerId];
+          if (localHealthState) {
+            hp = localHealthState.hp;
+            hpEl.textContent = String(localHealthState.hp);
           }
         }
         function update() {
@@ -3961,28 +4495,12 @@
             if (player.shieldTimer > 0) player.shieldTimer--;
             if (player.shieldCooldown > 0) player.shieldCooldown--;
           }
-          if (remotePlayer) {
-            if (Number.isFinite(remotePlayer.targetX))
-              remotePlayer.x += (remotePlayer.targetX - remotePlayer.x) * 0.24;
-            if (Number.isFinite(remotePlayer.targetY))
-              remotePlayer.y += (remotePlayer.targetY - remotePlayer.y) * 0.24;
-          }
-          if (shieldToggle) {
-            const shieldLabel =
-              player && player.shieldTimer > 0 && player.shieldHits > 0
-                ? "🛡 الدرع نشط"
-                : player && player.shieldCooldown > 0
-                  ? "🛡 شحن " + Math.ceil(player.shieldCooldown / 60) + "ث"
-                  : "🛡 درع (Q)";
-            if (shieldToggle.textContent !== shieldLabel)
-              shieldToggle.textContent = shieldLabel;
-            if (shieldToggle.getAttribute("aria-label") !== shieldLabel)
-              shieldToggle.setAttribute("aria-label", shieldLabel);
-            const shieldDisabled =
-              !player || (player.shieldCooldown > 0 && player.shieldTimer === 0);
-            if (shieldToggle.disabled !== shieldDisabled)
-              shieldToggle.disabled = shieldDisabled;
-          }
+          remotePlayers.forEach((remote) => {
+            if (Number.isFinite(remote.targetX))
+              remote.x += (remote.targetX - remote.x) * 0.24;
+            if (Number.isFinite(remote.targetY))
+              remote.y += (remote.targetY - remote.y) * 0.24;
+          });
           if (mode === "intro") introFrame++;
           if (mode === "launch") {
             if (++launchFrame >= LAUNCH_DURATION) {
@@ -3991,7 +4509,11 @@
             }
             return;
           }
-          if (peerConnection && peerConnection.open && player) {
+          const networkIsOpen =
+            peerRole === "host"
+              ? peerConnections.size > 0
+              : Boolean(peerConnection && peerConnection.open);
+          if (networkIsOpen && player) {
             netFrame++;
             if (netFrame % 6 === 0 && (mode === "play" || mode === "boss" || mode === "pvp")) {
               sendPeerData({
@@ -4025,32 +4547,26 @@
                   x: shot.x, y: shot.y, vx: shot.vx, vy: shot.vy,
                   r: shot.r, life: shot.life, kind: shot.kind,
                 })),
-                boss: boss ? { hp: boss.hp, alive: boss.alive } : null,
+                boss: boss ? {
+                  x: boss.x,
+                  y: boss.y,
+                  hp: boss.hp,
+                  alive: boss.alive,
+                  dashTimer: boss.dashTimer,
+                  cooldown: boss.cooldown,
+                  dashDirection: boss.dashDirection,
+                  pulseTimer: boss.pulseTimer,
+                } : null,
                 pvp: mode === "pvp" && pvpState ? {
-                  hostScore: pvpState.hostScore,
-                  guestScore: pvpState.guestScore,
-                  hostHp: pvpState.hostHp,
-                  guestHp: pvpState.guestHp,
-                  winner: pvpState.winner,
-                } : null,
-                players: mode === "pvp" && pvpState && remotePlayer ? {
-                  host: {
-                    x: player.x, y: player.y, face: player.face, skin: selectedSkin,
-                    weapon, laserSkinIndex,
-                    shieldTimer: player.shieldTimer, shieldHits: player.shieldHits,
-                  },
-                  guest: {
-                    x: remotePlayer.x, y: remotePlayer.y, face: remotePlayer.face,
-                    skin: remotePlayer.skin, weapon: remotePlayer.weapon,
-                    shieldTimer: remotePlayer.shieldTimer,
-                    laserSkinIndex: remotePlayer.laserSkinIndex,
-                    shieldHits: remotePlayer.shieldHits,
-                  },
-                } : null,
+                    arenaIndex: pvpArenaIndex,
+                    players: pvpState.players,
+                    winner: pvpState.winner,
+                  } : null,
+                players: networkPlayerSnapshot(),
                 shots: mode === "pvp" ? shots.slice(0, 24).map((shot) => ({
                   x: shot.x, y: shot.y, v: shot.v, kind: shot.kind,
                   color: shot.color, life: shot.life, damage: shot.damage,
-                  owner: shot.owner,
+                  owner: shot.owner, face: shot.face,
                   skinIndex: shot.skinIndex,
                 })) : null,
               });
@@ -4365,6 +4881,8 @@
             p.life--;
           });
           particles = particles.filter((p) => p.life > 0);
+          muzzleFlashes.forEach((flash) => flash.life--);
+          muzzleFlashes = muzzleFlashes.filter((flash) => flash.life > 0);
           if (
             mode === "play" &&
             pickups.every((a) => a.taken) &&
@@ -4387,10 +4905,10 @@
                 cooldown: 45,
                 dashDirection: 1,
               };
-              say("ظهر ملك الثقب! اهزمه لإنقاذ المجرة.", 220);
+              say("ظهر ملك الثقب! اهزمه لإنقاذ المجرة.", 90);
             }
           }
-          if (mode === "boss" && boss && boss.alive) {
+          if (mode === "boss" && boss && boss.alive && peerRole !== "guest") {
             const bossDistance = player.x + player.w / 2 - (boss.x + 55);
             if (boss.dashTimer > 0) {
               boss.x += boss.dashDirection * 3.8;
@@ -4405,26 +4923,31 @@
                 boss.x += Math.max(-1.2, Math.min(1.2, bossDistance * 0.012));
               }
             }
-            if (peerRole !== "guest") {
-              if (boss.pulseTimer > 0) {
-                boss.pulseTimer--;
-              } else {
-                const dx = player.x + player.w / 2 - (boss.x + 55);
-                const dy = player.y + player.h / 2 - (boss.y + 48);
-                const length = Math.max(1, Math.hypot(dx, dy));
-                enemyShots.push({
-                  x: boss.x + 55,
-                  y: boss.y + 48,
-                  vx: (dx / length) * 4,
-                  vy: (dy / length) * 4,
-                  r: 10,
-                  life: 130,
-                  kind: "boss",
-                });
-                boss.pulseTimer = 105;
-              }
+            if (boss.pulseTimer > 0) {
+              boss.pulseTimer--;
+            } else {
+              const dx = player.x + player.w / 2 - (boss.x + 55);
+              const dy = player.y + player.h / 2 - (boss.y + 48);
+              const length = Math.max(1, Math.hypot(dx, dy));
+              enemyShots.push({
+                x: boss.x + 55,
+                y: boss.y + 48,
+                vx: (dx / length) * 4,
+                vy: (dy / length) * 4,
+                r: 10,
+                life: 130,
+                kind: "boss",
+              });
+              boss.pulseTimer = 105;
             }
-            boss.x = Math.max(420, Math.min(820, boss.x));
+            const minBossX = Number.isFinite(boss.minX) ? boss.minX : 90;
+            const maxBossX = Number.isFinite(boss.maxX) ? boss.maxX : W - 200;
+            if (boss.x < minBossX || boss.x > maxBossX) {
+              boss.x = Math.max(minBossX, Math.min(maxBossX, boss.x));
+              boss.dashTimer = 0;
+              boss.cooldown = Math.max(boss.cooldown, 45);
+              boss.dashDirection *= -1;
+            }
             if (
               player.inv === 0 &&
               player.x < boss.x + 110 &&
@@ -4462,7 +4985,19 @@
           }
         }
         function loop() {
-          update();
+          if (mainMenu.hidden) {
+            update();
+            updateCamera();
+          }
+          else {
+            keys.left = false;
+            keys.right = false;
+            keys.jump = false;
+          }
+          const localPvpState = mode === "pvp" && pvpState && pvpState.players[localPlayerId];
+          const spectator = Boolean(localPvpState && !localPvpState.alive);
+          controlsElement.hidden = spectator;
+          spectatorNotice.hidden = !spectator;
           draw();
           requestAnimationFrame(loop);
         }
@@ -4479,6 +5014,98 @@
           mode = "launch";
           launchFrame = 0;
         }
+        document.getElementById("menuOpen").addEventListener("click", () => {
+          showMenu("home");
+        });
+        const fullscreenToggle = document.getElementById("fullscreenToggle");
+        fullscreenToggle.addEventListener("click", async () => {
+          try {
+            if (document.fullscreenElement) {
+              await document.exitFullscreen();
+            } else if (document.documentElement.requestFullscreen) {
+              await document.documentElement.requestFullscreen();
+            } else {
+              fullscreenToggle.title = "ملء الشاشة غير مدعوم في هذا المتصفح.";
+            }
+          } catch (error) {
+            fullscreenToggle.title = "تعذّر تفعيل ملء الشاشة: " + error.message;
+          }
+        });
+        document.addEventListener("fullscreenchange", () => {
+          const isFullscreen = Boolean(document.fullscreenElement);
+          fullscreenToggle.textContent = isFullscreen ? "⛶" : "⛶";
+          fullscreenToggle.title = isFullscreen ? "إنهاء ملء الشاشة" : "ملء الشاشة";
+          fullscreenToggle.setAttribute(
+            "aria-label",
+            isFullscreen ? "إنهاء ملء الشاشة" : "ملء الشاشة",
+          );
+        });
+        document.getElementById("menuPlay").addEventListener("click", () => {
+          showMenu("modes");
+        });
+        document.getElementById("menuSettings").addEventListener("click", () => {
+          showMenu("settings");
+        });
+        document.getElementById("menuResume").addEventListener("click", hideMenu);
+        document.querySelectorAll("[data-menu-back]").forEach((button) => {
+          button.addEventListener("click", () => showMenu(button.dataset.menuBack));
+        });
+        document.getElementById("menuStory").addEventListener("click", () => {
+          resetPeerSession();
+          multiplayerMode = "coop";
+          hideMenu();
+          begin();
+        });
+        document.getElementById("menuMultiplayer").addEventListener("click", () => {
+          showMenu("multiplayer");
+        });
+        document.getElementById("menuBattle").addEventListener("click", () => {
+          showMenu("battle-settings");
+        });
+        document.getElementById("menuCoop").addEventListener("click", () => {
+          showMenu("coop-settings");
+        });
+        document.getElementById("coopRoomSettings").addEventListener("click", () => {
+          showRoomSettings("coop");
+        });
+        document.getElementById("battleRoomSettings").addEventListener("click", () => {
+          showRoomSettings("pvp");
+        });
+        playerCountSelect.addEventListener("change", () => {
+          roomPlayerLimit = Number(playerCountSelect.value);
+          updateRoomStartButton();
+          setOnlineStatus("ستبدأ الغرفة عند اتصال " + roomPlayerLimit + " لاعبين.");
+        });
+        document.getElementById("startOnlineMatch").addEventListener("click", () => {
+          if (peerRole !== "host") {
+            setOnlineStatus("انتظر المضيف لبدء المباراة.");
+            return;
+          }
+          if (connectedPlayerCount() !== roomPlayerLimit) {
+            setOnlineStatus(roomPlayerStatus() + " — انتظر اكتمال العدد.");
+            return;
+          }
+          hideMenu();
+          begin();
+          sendPeerData({
+            type: "start",
+            gameMode: multiplayerMode,
+            players: networkPlayerSnapshot(),
+            pvpPlayers: pvpState && pvpState.players,
+            arenaIndex: pvpArenaIndex,
+          });
+        });
+        document.getElementById("menuExit").addEventListener("click", () => {
+          resetPeerSession();
+          mode = "credits";
+          pvpState = null;
+          keys.left = false;
+          keys.right = false;
+          keys.jump = false;
+          hp = 5;
+          hpEl.textContent = "5";
+          showMenu("home");
+        });
         window.addEventListener("keydown", (e) => {
           let k = e.key.toLowerCase();
           const target = e.target;
@@ -4524,10 +5151,7 @@
         });
         musicToggle.addEventListener("click", () => {
           musicEnabled = !musicEnabled;
-          if (musicEnabled) {
-            if (mode === "ending") startEndingMusic();
-            else startMusic();
-          }
+          if (musicEnabled && mainMenu.hidden) startMusic();
           else stopMusic();
           updateMusicButton();
         });
@@ -4537,39 +5161,38 @@
           musicVolumeLabel.textContent = Math.round(musicVolume * 100) + "%";
           localStorage.setItem("kernel-music-volume-v1", String(musicVolume));
         });
-        laserSkinToggle.addEventListener("click", () => {
-          laserSkinIndex = (laserSkinIndex + 1) % laserSkins.length;
-          updateLaserSkinButton();
+        effectsVolumeControl.addEventListener("input", () => {
+          effectsVolume = Number(effectsVolumeControl.value);
+          effectsVolumeLabel.textContent = Math.round(effectsVolume * 100) + "%";
+          localStorage.setItem("kernel-effects-volume-v1", String(effectsVolume));
         });
-        shieldToggle.addEventListener("click", activateShield);
+        laserSkinToggle.addEventListener("click", () => {
+          laserSkinPanel.hidden = !laserSkinPanel.hidden;
+          skinPanel.hidden = true;
+          laserSkinToggle.setAttribute("aria-expanded", String(!laserSkinPanel.hidden));
+          skinToggle.setAttribute("aria-expanded", "false");
+        });
         shieldTouch.addEventListener("pointerdown", (e) => {
           e.preventDefault();
           activateShield();
         });
         skinToggle.addEventListener("click", () => {
           skinPanel.hidden = !skinPanel.hidden;
+          laserSkinPanel.hidden = true;
           skinToggle.setAttribute("aria-expanded", String(!skinPanel.hidden));
+          laserSkinToggle.setAttribute("aria-expanded", "false");
         });
-        onlineToggle.addEventListener("click", () => {
-          onlinePanel.hidden = !onlinePanel.hidden;
-          onlineToggle.setAttribute("aria-expanded", String(!onlinePanel.hidden));
-        });
-        fullscreenToggle.addEventListener("click", async () => {
-          try {
-            if (document.fullscreenElement) await document.exitFullscreen();
-            else await gameWrap.requestFullscreen();
-          } catch (error) {
-            window.alert("تعذّر تغيير وضع ملء الشاشة: " + error.message);
-          }
-        });
-        document.addEventListener("fullscreenchange", () => {
-          const isFullscreen = document.fullscreenElement === gameWrap;
-          fullscreenToggle.textContent = isFullscreen ? "⛶ خروج من ملء الشاشة" : "⛶ ملء الشاشة";
-          fullscreenToggle.setAttribute("aria-pressed", String(isFullscreen));
-          requestAnimationFrame(resizeCanvasForDisplay);
+        downloadToggle.addEventListener("click", () => {
+          window.location.assign("downloads.html");
         });
         document.querySelectorAll(".skin-choice").forEach((button) => {
           button.addEventListener("click", () => applySkin(Number(button.dataset.skin)));
+        });
+        document.querySelectorAll(".laser-skin-choice").forEach((button) => {
+          button.addEventListener("click", () => {
+            laserSkinIndex = Number(button.dataset.laserSkin);
+            updateLaserSkinButton();
+          });
         });
         document.getElementById("createRoom").addEventListener("click", createOnlineRoom);
         document.getElementById("joinRoom").addEventListener("click", joinOnlineRoom);
@@ -4583,29 +5206,6 @@
             () => setOnlineStatus("تم نسخ رابط الدعوة."),
             () => window.prompt("انسخ رابط دعوة صديقك:", invite),
           );
-        });
-        multiplayerModeSelect.addEventListener("change", () => {
-          if (peerRole === "guest") return;
-          multiplayerMode = multiplayerModeSelect.value === "pvp" ? "pvp" : "coop";
-          sendOnlineSession();
-          setOnlineStatus(
-            multiplayerMode === "pvp"
-              ? "النمط: PVP — أول من يسجل 5 نقاط يفوز."
-              : "النمط: تعاون — العبوا الحملة معًا."
-          );
-        });
-        jupiterPlatformMode.addEventListener("change", () => {
-          if (planet !== 4) return;
-          configurePlatforms();
-          const label = {
-            mixed: "متنوعة",
-            moving: "متحركة",
-            crumbling: "تنهار",
-            stable: "ثابتة",
-          }[jupiterPlatformMode.value];
-          challengeLabel.textContent =
-            planetChallenges[planet - 1] + " نوع المنصات: " + label + ".";
-          say("تم تغيير منصات المشتري إلى: " + label + ".");
         });
         window.addEventListener("keyup", (e) => {
           let k = e.key.toLowerCase();
